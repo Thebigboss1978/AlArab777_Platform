@@ -377,9 +377,9 @@ nav a:hover, nav a.active {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Base center */
+    transform: translate(-50%, -50%);
     box-shadow: 0 0 15px var(--neon-orange);
-    transition: transform 0.05s linear; /* Smooth Look */
+    transition: transform 0.05s linear; 
 }
 
 .seven-aura {
@@ -425,6 +425,20 @@ nav a:hover, nav a.active {
     font-size: 0.9rem;
     font-weight: bold;
     letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+}
+
+.seven-status-dot {
+    width: 8px; height: 8px;
+    background-color: #0f0;
+    border-radius: 50%;
+    box-shadow: 0 0 5px #0f0;
+    margin-right: 10px;
+    animation: pulse-green 2s infinite;
+}
+@keyframes pulse-green {
+    0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; }
 }
 
 .seven-body {
@@ -444,6 +458,7 @@ nav a:hover, nav a.active {
     border-top: 1px solid rgba(255,255,255,0.1);
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 .seven-input {
@@ -457,10 +472,23 @@ nav a:hover, nav a.active {
     font-family: 'Cairo', sans-serif;
     transition: 0.3s;
 }
-
 .seven-input:focus {
     border-color: var(--neon-cyan);
     background: rgba(0, 229, 255, 0.05);
+}
+
+.seven-attach {
+    background: transparent;
+    border: 1px solid #444;
+    color: #888;
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.3s;
+}
+.seven-attach:hover {
+    border-color: var(--neon-cyan); color: var(--neon-cyan);
 }
 
 .seven-send {
@@ -475,12 +503,13 @@ nav a:hover, nav a.active {
     font-size: 0.8rem;
     letter-spacing: 1px;
     transition: 0.3s;
+    height: 40px;
 }
 .seven-send:hover {
     box-shadow: 0 0 15px rgba(255, 94, 0, 0.6);
 }
 
-.msg { margin-bottom: 12px; padding: 12px 16px; border-radius: 8px; max-width: 85%; line-height: 1.5; }
+.msg { margin-bottom: 12px; padding: 12px 16px; border-radius: 8px; max-width: 85%; line-height: 1.5; word-wrap: break-word; }
 .msg.bot { 
     background: rgba(0, 229, 255, 0.1); 
     border-left: 2px solid var(--neon-cyan);
@@ -495,6 +524,7 @@ nav a:hover, nav a.active {
     margin-left: auto;
     text-align: right;
 }
+.typing { font-style: italic; color: #555; font-size: 0.8rem; margin-left: 10px; }
 </style>
 </head>
 <body>
@@ -560,11 +590,15 @@ nav a:hover, nav a.active {
     <div class="seven-chat-window" id="sevenChat">
         <div class="seven-header">
             <div class="seven-title">
+                <span class="seven-status-dot"></span>
                 <span style="color:var(--neon-cyan);">SEVEN</span> 
                 <span style="color:var(--text-secondary);">|</span> 
                 <span style="color:var(--neon-orange);">INTELLIGENCE</span>
             </div>
-            <button onclick="toggleSeven()" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;">×</button>
+            <div style="display:flex; gap:10px;">
+                <button onclick="clearMemory()" title="Wipe Memory" style="background:none;border:none;color:#555;cursor:pointer;"><i class="fas fa-trash"></i></button>
+                <button onclick="toggleSeven()" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;">×</button>
+            </div>
         </div>
         <div class="seven-body" id="sevenBody">
             <div class="msg bot">
@@ -574,6 +608,11 @@ nav a:hover, nav a.active {
             </div>
         </div>
         <div class="seven-input-area">
+            <button class="seven-attach" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-paperclip"></i>
+            </button>
+            <input type="file" id="fileInput" hidden onchange="handleFile(this)">
+            
             <input type="text" class="seven-input" id="sevenInput" placeholder="Command me..." onkeypress="handleKey(event)">
             <button class="seven-send" onclick="sendMessage()">EXECUTE</button>
         </div>
@@ -581,44 +620,45 @@ nav a:hover, nav a.active {
 
     <!-- SCRIPT -->
     <script>
-        // --- Custom Cursor & Seven Logic ---
+        // --- Persistence & State ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChat();
+        });
+
         const cursorDot = document.getElementById("cursor-dot");
         const cursorOutline = document.getElementById("cursor-outline");
         const sevenPet = document.getElementById("sevenPet");
         const pupil = document.getElementById("sevenPupil");
+        const chatBody = document.getElementById("sevenBody");
 
+        // --- Mouse Interaction ---
         window.addEventListener("mousemove", function(e) {
             const posX = e.clientX;
             const posY = e.clientY;
 
-            // Move Dot
             cursorDot.style.left = `${posX}px`;
             cursorDot.style.top = `${posY}px`;
 
-            // Move Outline (Lag)
             cursorOutline.animate({
                 left: `${posX}px`,
                 top: `${posY}px`
             }, { duration: 400, fill: "forwards" });
             
-            // Eye Looking Logic
             if(sevenPet) {
                 const rect = sevenPet.getBoundingClientRect();
                 const eyeX = rect.left + rect.width / 2;
                 const eyeY = rect.top + rect.height / 2;
-                
                 const angle = Math.atan2(posY - eyeY, posX - eyeX);
-                const distance = Math.min(10, Math.hypot(posX - eyeX, posY - eyeY) / 10); // Limit distance to 10px
+                const distance = Math.min(10, Math.hypot(posX - eyeX, posY - eyeY) / 10);
                 
                 const pupilX = Math.cos(angle) * distance;
                 const pupilY = Math.sin(angle) * distance;
                 
-                // We use CSS translate(-50%, -50%) for centering, so we add the offset
                 pupil.style.transform = `translate(calc(-50% + ${pupilX}px), calc(-50% + ${pupilY}px))`;
             }
         });
 
-        // Hover Interactions (Cursor Glows Orange)
+        // Hover Effects
         document.querySelectorAll('a, button, .card').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 cursorOutline.style.width = '50px';
@@ -634,70 +674,143 @@ nav a:hover, nav a.active {
             });
         });
 
-        // Seven "Jump" Animation (Playful)
+        // Random Life Animation
         setInterval(() => {
             if(Math.random() > 0.6) {
                 const jumpX = (Math.random() - 0.5) * 10;
                 const jumpY = -15; 
                 sevenPet.style.transform = `translate(${jumpX}px, ${jumpY}px)`;
-                
-                setTimeout(() => {
-                    sevenPet.style.transform = 'translate(0,0)';
-                }, 300);
+                setTimeout(() => { sevenPet.style.transform = 'translate(0,0)'; }, 300);
             }
         }, 4000);
 
-        // Chat Functions
+        // --- Chat Logic ---
         function toggleSeven() {
             const chat = document.getElementById('sevenChat');
             const isFlex = chat.style.display === 'flex';
             chat.style.display = isFlex ? 'none' : 'flex';
+            if(!isFlex) scrollToBottom();
         }
 
         function handleKey(e) {
             if (e.key === 'Enter') sendMessage();
         }
 
+        function handleFile(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const type = file.type.startsWith('image/') ? 'Image' : 'File';
+                addMessage('user', `[Attached ${type}: ${file.name}]`);
+                
+                setTimeout(() => {
+                    addMessage('bot', `Protocol Accepted. Analyzing ${type} structure... 100% Secure.`);
+                }, 1000);
+            }
+        }
+
         function sendMessage() {
             const input = document.getElementById('sevenInput');
-            const body = document.getElementById('sevenBody');
             const text = input.value.trim();
             if (!text) return;
 
-            // User
-            const userDiv = document.createElement('div');
-            userDiv.className = 'msg user';
-            userDiv.innerText = text;
-            body.appendChild(userDiv);
-            
+            addMessage('user', text);
             input.value = '';
-            body.scrollTop = body.scrollHeight;
 
             // Thinking
             const typingDiv = document.createElement('div');
             typingDiv.className = 'typing';
             typingDiv.style.color = 'var(--neon-cyan)';
             typingDiv.innerText = 'Seven is thinking...';
-            body.appendChild(typingDiv);
-            body.scrollTop = body.scrollHeight;
+            chatBody.appendChild(typingDiv);
+            scrollToBottom();
 
             setTimeout(() => {
-                body.removeChild(typingDiv);
-                
-                let reply = "I am processing your input logic.";
-                const lowerText = text.toLowerCase();
-                
-                if (lowerText.includes("safari")) reply = "Scanning Desert Protocols... 🌵 Safari packages found. Engaging adventure mode.";
-                if (lowerText.includes("hotel")) reply = "Accessing Luxury Database... 🏨 I have filtered 5-star accommodations for you.";
-                if (lowerText.includes("arrab") || lowerText.includes("boss")) reply = "Alert: The Arrab is the Admin. Are you the Creator? Input DNA code.";
-                if (lowerText.includes("trend") || lowerText.includes("tiktok")) reply = "Trend Algorithms Active. 📈 Generating viral vectors for social domination.";
-
-                const botDiv = document.createElement('div');
-                botDiv.className = 'msg bot';
-                botDiv.innerHTML = reply;
-                body.appendChild(botDiv);
-                body.scrollTop = body.scrollHeight;
+                chatBody.removeChild(typingDiv);
+                processCommand(text);
             }, 800);
+        }
+
+        function addMessage(sender, text) {
+            const div = document.createElement('div');
+            div.className = `msg ${sender}`;
+            div.innerHTML = text; // Allow HTML
+            chatBody.appendChild(div);
+            scrollToBottom();
+            saveChat();
+        }
+
+        function scrollToBottom() {
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // --- THE MIND (Logic) ---
+        function processCommand(text) {
+            const lower = text.toLowerCase();
+            
+            // GOD MODE ACTIVATION (The Suit)
+            if (['777', 'dna', 'arrab', 'god mode', 'seven'].some(k => lower.includes(k))) {
+                activateGodMode();
+                return;
+            }
+            
+             if (lower.includes("check dna") || lower.includes("tunnel")) {
+                activateGodMode();
+                return;
+            }
+
+            // Normal Responses
+            let reply = "I am processing your input logic.";
+            
+            if (lower.includes("safari")) reply = "Scanning Desert Protocols... 🌵 Safari packages found. Engaging adventure mode.";
+            else if (lower.includes("hotel") || lower.includes("book")) reply = "Accessing Luxury Database... 🏨 I have filtered 5-star accommodations for you.";
+            else if (lower.includes("trend") || lower.includes("tiktok")) reply = "Trend Algorithms Active. 📈 Generating viral vectors for social domination.";
+            else if (lower.includes("who are you")) reply = "I am Seven. The Architect's Shadow.";
+            
+            addMessage('bot', reply);
+        }
+
+        // --- GOD MODE (The Suit Transformation) ---
+        function activateGodMode() {
+            // 1. Visual Transformation
+            document.documentElement.style.setProperty('--neon-cyan', '#FF0000'); // Red Alert
+            document.documentElement.style.setProperty('--neon-orange', '#D4AF37'); // Royal Gold
+            document.body.style.backgroundImage = "radial-gradient(circle at 50% 50%, #220000 0%, #000 100%)";
+            
+            // 2. The Tunnel Diagnostic
+            const diagnostic = `
+                <div style="font-family:monospace; font-size:0.8rem; background:#000; padding:10px; border:1px solid #FF0000; color:#0f0;">
+                    🚇 TUNNEL DIAGNOSTIC:<br>
+                    ✅ Best Route: OpenAI<br>
+                    🔗 Active: ['Ollama (Local)', 'OpenAI (Cloud)']<br>
+                    ⊕ <br>
+                    <strong>MASTER SUIT ACTIVE</strong>
+                </div>
+            `;
+            addMessage('bot', diagnostic);
+            
+            // 3. Admin Notification
+            setTimeout(() => {
+                addMessage('bot', "Welcome Back, Al-Arrab. The Warehouse is Open. All Permissions Granted.");
+            }, 1000);
+        }
+
+        // --- Memory (LocalStorage) ---
+        function saveChat() {
+            const html = chatBody.innerHTML;
+            localStorage.setItem('seven_memory_v1', html);
+        }
+
+        function loadChat() {
+            const saved = localStorage.getItem('seven_memory_v1');
+            if (saved) {
+                chatBody.innerHTML = saved;
+            }
+            scrollToBottom();
+        }
+
+        function clearMemory() {
+            localStorage.removeItem('seven_memory_v1');
+            chatBody.innerHTML = '<div class="msg bot">Memory Wiped. Ready for new input.</div>';
         }
     </script>
     
