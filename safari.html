@@ -3,428 +3,691 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>السفاري | AlArab Club 777</title>
+    <title>Safari | AlArab Club 777</title>
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
 :root {
-    --gold: #D4AF37;
-    --dark-green: #006400;
-    --papyrus: #F5F5DC;
-    --black: #0c0c0c;
-    --glass-bg: rgba(20, 20, 20, 0.85);
-    --gold-gradient: linear-gradient(135deg, #FFD700, #D4AF37, #C5A028);
+    --neon-cyan: #00E5FF;
+    --neon-orange: #FF5E00;
+    --deep-black: #050505;
+    --glass-panel: rgba(20, 20, 20, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    cursor: none; /* We use a custom cursor */
 }
 
 body {
     font-family: 'Cairo', sans-serif;
-    background-color: var(--black);
-    background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 100%);
-    color: var(--papyrus);
+    background-color: var(--deep-black);
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 229, 255, 0.08) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(255, 94, 0, 0.08) 0%, transparent 20%);
+    color: var(--text-primary);
     overflow-x: hidden;
     line-height: 1.6;
 }
 
-/* Header */
+/* --- CUSTOM CURSOR --- */
+.cursor-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--neon-cyan);
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    box-shadow: 0 0 10px var(--neon-cyan);
+    transition: width 0.2s, height 0.2s;
+}
+.cursor-outline {
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255, 94, 0, 0.5);
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.15s ease-out;
+}
+
+/* --- HEADER --- */
 header {
-    background: rgba(0, 0, 0, 0.9);
-    border-bottom: 2px solid var(--gold);
-    padding: 1rem 2rem;
+    background: rgba(5, 5, 5, 0.85);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 1.2rem 3rem;
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
 .logo {
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--gold);
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
     text-decoration: none;
+    text-shadow: 0 0 15px var(--neon-cyan);
 }
 
 nav a {
-    color: #fff;
+    color: var(--text-secondary);
     text-decoration: none;
-    margin-left: 20px;
+    margin-left: 25px;
     font-weight: 400;
-    transition: color 0.3s;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
 }
 
 nav a:hover, nav a.active {
-    color: var(--gold);
+    color: #fff;
+    text-shadow: 0 0 8px var(--neon-orange);
+    border-bottom-color: var(--neon-orange);
 }
 
-/* Hero Section */
+/* --- HERO --- */
 .hero {
     text-align: center;
     padding: 6rem 2rem;
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg');
+    background: radial-gradient(circle, rgba(0,0,0,0.5) 0%, rgba(5,5,5,1) 100%), 
+                url('https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg');
     background-size: cover;
     background-position: center;
-    border-bottom: 1px solid var(--gold);
+    position: relative;
+    border-bottom: 1px solid var(--glass-border);
 }
 
 .hero h1 {
-    font-size: 3.5rem;
-    color: var(--gold);
+    font-size: 4rem;
+    color: #fff;
     margin-bottom: 1rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(0, 229, 255, 0.7);
 }
 
 .hero p {
     font-size: 1.2rem;
+    color: var(--text-secondary);
     max-width: 700px;
-    margin: 0 auto 2rem;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
 }
 
-/* Cards Container */
+/* --- CARDS & GRID --- */
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 4rem auto;
     padding: 0 2rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
 }
 
-/* Card Style */
 .card {
-    background: var(--glass-bg);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    border-radius: 15px;
+    background: var(--glass-panel);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
     overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
-    border-color: var(--gold);
+    transform: translateY(-8px);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.15);
 }
 
 .card-img {
-    height: 200px;
-    background-color: #333;
+    height: 220px;
+    background-color: #111;
     background-size: cover;
     background-position: center;
     position: relative;
 }
 
+.card-img::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(to top, var(--glass-panel), transparent);
+}
+
 .card-badge {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background: var(--gold-gradient);
-    color: #000;
-    padding: 5px 10px;
-    border-radius: 5px;
+    top: 15px;
+    right: 15px;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid var(--neon-orange);
+    color: var(--neon-orange);
+    padding: 4px 12px;
+    border-radius: 20px;
     font-weight: bold;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 2;
+    box-shadow: 0 0 10px rgba(255, 94, 0, 0.3);
 }
 
 .card-content {
-    padding: 1.5rem;
+    padding: 2rem;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
 
 .card h3 {
-    color: var(--gold);
-    margin-bottom: 0.5rem;
-    font-size: 1.4rem;
+    color: #fff;
+    margin-bottom: 0.8rem;
+    font-size: 1.5rem;
+    font-weight: 400;
 }
 
 .card p {
     font-size: 0.95rem;
-    color: #ccc;
-    margin-bottom: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
     flex-grow: 1;
+    line-height: 1.7;
 }
 
 .card-meta {
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 1rem;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 1.5rem;
     margin-top: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.9rem;
 }
 
 .price {
-    font-weight: bold;
-    color: #fff;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
 }
 
 .btn {
     background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    padding: 0.5rem 1rem;
+    border: 1px solid var(--text-secondary);
+    color: #fff;
+    padding: 0.7rem 1.5rem;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 30px;
     transition: all 0.3s;
-    font-size: 0.9rem;
-    cursor: pointer;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .btn:hover {
-    background: var(--gold);
-    color: #000;
+    border-color: var(--neon-orange);
+    background: var(--neon-orange);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255, 94, 0, 0.4);
 }
 
-/* Footer */
-footer {
-    text-align: center;
+/* --- GUIDE CARD --- */
+.guide-card {
+    background: var(--glass-panel);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
     padding: 2rem;
-    background: #000;
-    border-top: 1px solid #333;
-    margin-top: 4rem;
-    color: #777;
+    text-align: center;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.guide-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+}
+.guide-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--neon-cyan);
+    margin-bottom: 1.2rem;
+    padding: 5px;
+    background: rgba(0, 229, 255, 0.1);
+}
+.guide-role {
+    color: var(--neon-orange);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+.guide-name {
+    color: #fff;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
 }
 
-    
-    /* Instagram-style Guide Card */
-    .guide-card {
-        background: var(--glass-bg);
-        border: 1px solid rgba(212, 175, 55, 0.3);
-        border-radius: 20px;
-        padding: 2rem;
-        text-align: center;
-        transition: transform 0.3s;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .guide-card:hover {
-        transform: translateY(-5px);
-        border-color: var(--gold);
-    }
-    .guide-img {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid var(--gold);
-        margin-bottom: 1rem;
-        background-color: #333;
-    }
-    .guide-role {
-        color: #aaa;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    .guide-name {
-        color: var(--gold);
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-        font-weight: 700;
-    }
-    .social-btn {
-        background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
-        color: white;
-        padding: 0.8rem 2rem;
-        border-radius: 25px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: opacity 0.3s;
-        border: none;
-        cursor: pointer;
-        display: inline-block;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .social-btn:hover {
-        opacity: 0.9;
-    }
-    .social-btn.default {
-        background: var(--gold-gradient);
-        color: black;
-    }
-    .social-btn.disabled {
-        background: #333;
-        color: #777;
-        cursor: not-allowed;
-    }
-    
-    /* Seven Agent Widget */
-    .seven-widget-btn {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 70px;
-        height: 70px;
-        background: radial-gradient(circle, #D4AF37 0%, #8a6e1e 100%);
-        border-radius: 50%;
-        border: 2px solid #fff;
-        box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
-        cursor: pointer;
-        z-index: 1000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.3s, box-shadow 0.3s;
-        animation: pulse-gold 3s infinite;
-    }
-    .seven-widget-btn:hover {
-        transform: scale(1.1);
-        box-shadow: 0 0 30px rgba(212, 175, 55, 0.9);
-    }
-    @keyframes pulse-gold {
-        0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-        70% { box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
-    }
-    .seven-icon {
-        font-size: 35px;
-        color: #000;
-    }
-    
-    /* Chat Window */
-    .seven-chat-window {
-        position: fixed;
-        bottom: 110px;
-        right: 30px;
-        width: 350px;
-        height: 500px;
-        background: rgba(10, 10, 10, 0.95);
-        border: 1px solid var(--gold);
-        border-radius: 15px;
-        display: none;
-        flex-direction: column;
-        z-index: 1000;
-        box-shadow: -5px 10px 40px rgba(0,0,0,0.8);
-        backdrop-filter: blur(15px);
-        overflow: hidden;
-    }
-    .seven-header {
-        background: linear-gradient(90deg, #111, #222);
-        padding: 15px;
-        border-bottom: 2px solid var(--gold);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .seven-title {
-        color: var(--gold);
-        font-weight: bold;
-        font-family: 'Courier New', monospace;
-        letter-spacing: 2px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .seven-status {
-        width: 10px;
-        height: 10px;
-        background-color: #0f0;
-        border-radius: 50%;
-        box-shadow: 0 0 5px #0f0;
-    }
-    .seven-body {
-        flex-grow: 1;
-        padding: 15px;
-        overflow-y: auto;
-        color: var(--papyrus);
-        font-family: 'Courier New', monospace;
-        font-size: 0.9rem;
-        background-image: linear-gradient(rgba(0, 100, 0, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 100, 0, 0.05) 1px, transparent 1px);
-        background-size: 20px 20px;
-    }
-    .seven-input-area {
-        padding: 15px;
-        border-top: 1px solid #333;
-        display: flex;
-        gap: 10px;
-    }
-    .seven-input {
-        flex-grow: 1;
-        background: #000;
-        border: 1px solid #444;
-        color: var(--gold);
-        padding: 10px;
-        border-radius: 5px;
-        outline: none;
-        font-family: 'Cairo', sans-serif;
-    }
-    .seven-input:focus {
-        border-color: var(--gold);
-    }
-    .seven-send {
-        background: var(--gold);
-        border: none;
-        color: #000;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-    
-    /* Messages */
-    .msg { margin-bottom: 10px; padding: 10px; border-radius: 8px; max-width: 80%; }
-    .msg.bot { background: rgba(0, 100, 0, 0.2); border-left: 3px solid var(--gold); align-self: flex-start; }
-    .msg.user { background: rgba(212, 175, 55, 0.1); border-right: 3px solid var(--gold); align-self: flex-end; margin-left: auto; text-align: right; }
-    .typing { font-style: italic; color: #555; font-size: 0.8rem; }
-    </style>
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #222, #333);
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+    border: 1px solid #444;
+}
+
+.social-btn.instagram { border-color: #E1306C; color: #E1306C; }
+.social-btn.instagram:hover { background: #E1306C; color: white; box-shadow: 0 0 15px rgba(225, 48, 108, 0.5); }
+
+.social-btn.youtube { border-color: #FF0000; color: #FF0000; }
+.social-btn.youtube:hover { background: #FF0000; color: white; box-shadow: 0 0 15px rgba(255, 0, 0, 0.5); }
+
+.social-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: #555;
+}
+
+/* --- SEVEN PET (LIVING ENTITY) --- */
+.seven-pet-container {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    width: 64px;
+    height: 64px;
+    z-index: 2000;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.seven-pet-container:hover {
+    transform: scale(1.1);
+}
+
+.seven-eye-outer {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    border-radius: 50%;
+    border: 2px solid var(--neon-cyan);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
+    z-index: 2;
+    animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+    0%, 100% { box-shadow: 0 0 25px rgba(0, 229, 255, 0.5); border-color: var(--neon-cyan);}
+    50% { box-shadow: 0 0 40px rgba(0, 229, 255, 0.8); border-color: #fff;}
+}
+
+.seven-eye-inner {
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(circle, #222 20%, #000 90%);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.seven-pupil {
+    width: 35%;
+    height: 35%;
+    background: var(--neon-orange);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Base center */
+    box-shadow: 0 0 15px var(--neon-orange);
+    transition: transform 0.05s linear; /* Smooth Look */
+}
+
+.seven-aura {
+    position: absolute;
+    top: -8px; left: -8px; right: -8px; bottom: -8px;
+    border: 1px dashed var(--neon-cyan);
+    border-radius: 50%;
+    animation: spin 12s linear infinite;
+    opacity: 0.4;
+    z-index: 1;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* --- SEVEN CHAT WINDOW --- */
+.seven-chat-window {
+    position: fixed;
+    bottom: 120px;
+    right: 40px;
+    width: 360px;
+    height: 550px;
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid var(--neon-cyan);
+    border-radius: 16px;
+    display: none;
+    flex-direction: column;
+    z-index: 2000;
+    box-shadow: -10px 10px 50px rgba(0,0,0,0.8);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+}
+
+.seven-header {
+    background: rgba(0,0,0,0.8);
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.seven-title {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.seven-body {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: 
+        linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+}
+
+.seven-input-area {
+    padding: 15px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    gap: 10px;
+}
+
+.seven-input {
+    flex-grow: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #333;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    outline: none;
+    font-family: 'Cairo', sans-serif;
+    transition: 0.3s;
+}
+
+.seven-input:focus {
+    border-color: var(--neon-cyan);
+    background: rgba(0, 229, 255, 0.05);
+}
+
+.seven-send {
+    background: var(--neon-orange);
+    color: #fff;
+    border: none;
+    padding: 0 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+.seven-send:hover {
+    box-shadow: 0 0 15px rgba(255, 94, 0, 0.6);
+}
+
+.msg { margin-bottom: 12px; padding: 12px 16px; border-radius: 8px; max-width: 85%; line-height: 1.5; }
+.msg.bot { 
+    background: rgba(0, 229, 255, 0.1); 
+    border-left: 2px solid var(--neon-cyan);
+    color: #eee;
+    align-self: flex-start;
+}
+.msg.user {
+    background: rgba(255, 94, 0, 0.1);
+    border-right: 2px solid var(--neon-orange);
+    color: #fff;
+    align-self: flex-end;
+    margin-left: auto;
+    text-align: right;
+}
+</style>
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
     <header>
         <a href="index.html" class="logo">AlArab Club 777</a>
         <nav>
-            <a href="index.html" >Home</a><a href="hotels.html" >Hotels</a><a href="bazaars.html" >Bazaars</a><a href="safari.html" >Safari</a><a href="guides.html" >Guides</a>
+            <a href="index.html" >Home</a><a href="hotels.html" >Hotels</a><a href="bazaars.html" >Bazaars</a><a href="safari.html" class="active">Safari</a><a href="guides.html" >Guides</a>
         </nav>
     </header>
     
-    safari
     
+<div class="hero" style="padding: 4rem 1rem; background-image: none; background: #050505;">
+    <h1>Safari Adventures</h1>
+</div>
+<div class="container">
     
-    <!-- Seven Widget -->
-    <div class="seven-widget-btn" onclick="toggleSeven()">
-        <span class="seven-icon">👁️</span>
+    <div class="card">
+        <div class="card-img" style="background: linear-gradient(45deg, #111, #222);">
+            <div class="card-badge">Camel Ride</div>
+        </div>
+        <div class="card-content">
+            <h3>No Name</h3>
+            <p></p>
+            <div class="card-meta">
+                <span class="price">500 EGP</span>
+                <div>
+                     <a href="#" target="_blank" class="btn">Location</a>
+                </div>
+            </div>
+        </div>
     </div>
     
+    <div class="card">
+        <div class="card-img" style="background: linear-gradient(45deg, #111, #222);">
+            <div class="card-badge">Horse Carriage</div>
+        </div>
+        <div class="card-content">
+            <h3>No Name</h3>
+            <p></p>
+            <div class="card-meta">
+                <span class="price">800 EGP</span>
+                <div>
+                     <a href="#" target="_blank" class="btn">Location</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-img" style="background: linear-gradient(45deg, #111, #222);">
+            <div class="card-badge">Beach Buggy</div>
+        </div>
+        <div class="card-content">
+            <h3>No Name</h3>
+            <p></p>
+            <div class="card-meta">
+                <span class="price">1200 EGP</span>
+                <div>
+                     <a href="#" target="_blank" class="btn">Location</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-img" style="background: linear-gradient(45deg, #111, #222);">
+            <div class="card-badge">Horse Ride</div>
+        </div>
+        <div class="card-content">
+            <h3>No Name</h3>
+            <p></p>
+            <div class="card-meta">
+                <span class="price">600 EGP</span>
+                <div>
+                     <a href="#" target="_blank" class="btn">Location</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+    
+    <!-- Seven Widget (Living Entity) -->
+    <div class="seven-pet-container" id="sevenPet" onclick="toggleSeven()">
+        <div class="seven-eye-outer">
+            <div class="seven-eye-inner">
+                <div class="seven-pupil" id="sevenPupil"></div>
+            </div>
+        </div>
+        <div class="seven-aura"></div>
+    </div>
+    
+    <!-- Chat Window -->
     <div class="seven-chat-window" id="sevenChat">
         <div class="seven-header">
-            <div class="seven-title"><div class="seven-status"></div> SEVEN | 777</div>
-            <button onclick="toggleSeven()" style="background:none;border:none;color:var(--gold);font-size:1.2rem;cursor:pointer;">×</button>
+            <div class="seven-title">
+                <span style="color:var(--neon-cyan);">SEVEN</span> 
+                <span style="color:var(--text-secondary);">|</span> 
+                <span style="color:var(--neon-orange);">INTELLIGENCE</span>
+            </div>
+            <button onclick="toggleSeven()" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;">×</button>
         </div>
         <div class="seven-body" id="sevenBody">
             <div class="msg bot">
-                Welcome to AlArab Club. <br>
-                I am "Seven" (7), the Guardian AI of this realm.<br><br>
-                Ask me about Tourism, Bazaars, or our Services.
+                I am Seven. <br>
+                The digital soul of this place.<br><br>
+                I am listening. Speak.
             </div>
         </div>
         <div class="seven-input-area">
-            <input type="text" class="seven-input" id="sevenInput" placeholder="Type your message..." onkeypress="handleKey(event)">
-            <button class="seven-send" onclick="sendMessage()">Send</button>
+            <input type="text" class="seven-input" id="sevenInput" placeholder="Command me..." onkeypress="handleKey(event)">
+            <button class="seven-send" onclick="sendMessage()">EXECUTE</button>
         </div>
     </div>
 
+    <!-- SCRIPT -->
     <script>
+        // --- Custom Cursor & Seven Logic ---
+        const cursorDot = document.getElementById("cursor-dot");
+        const cursorOutline = document.getElementById("cursor-outline");
+        const sevenPet = document.getElementById("sevenPet");
+        const pupil = document.getElementById("sevenPupil");
+
+        window.addEventListener("mousemove", function(e) {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            // Move Dot
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Move Outline (Lag)
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 400, fill: "forwards" });
+            
+            // Eye Looking Logic
+            if(sevenPet) {
+                const rect = sevenPet.getBoundingClientRect();
+                const eyeX = rect.left + rect.width / 2;
+                const eyeY = rect.top + rect.height / 2;
+                
+                const angle = Math.atan2(posY - eyeY, posX - eyeX);
+                const distance = Math.min(10, Math.hypot(posX - eyeX, posY - eyeY) / 10); // Limit distance to 10px
+                
+                const pupilX = Math.cos(angle) * distance;
+                const pupilY = Math.sin(angle) * distance;
+                
+                // We use CSS translate(-50%, -50%) for centering, so we add the offset
+                pupil.style.transform = `translate(calc(-50% + ${pupilX}px), calc(-50% + ${pupilY}px))`;
+            }
+        });
+
+        // Hover Interactions (Cursor Glows Orange)
+        document.querySelectorAll('a, button, .card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorOutline.style.width = '50px';
+                cursorOutline.style.height = '50px';
+                cursorOutline.style.borderColor = 'var(--neon-orange)';
+                cursorOutline.style.backgroundColor = 'rgba(255, 94, 0, 0.1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorOutline.style.width = '30px';
+                cursorOutline.style.height = '30px';
+                cursorOutline.style.borderColor = 'rgba(255, 94, 0, 0.5)';
+                cursorOutline.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // Seven "Jump" Animation (Playful)
+        setInterval(() => {
+            if(Math.random() > 0.6) {
+                const jumpX = (Math.random() - 0.5) * 10;
+                const jumpY = -15; 
+                sevenPet.style.transform = `translate(${jumpX}px, ${jumpY}px)`;
+                
+                setTimeout(() => {
+                    sevenPet.style.transform = 'translate(0,0)';
+                }, 300);
+            }
+        }, 4000);
+
+        // Chat Functions
         function toggleSeven() {
             const chat = document.getElementById('sevenChat');
-            chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
+            const isFlex = chat.style.display === 'flex';
+            chat.style.display = isFlex ? 'none' : 'flex';
         }
 
         function handleKey(e) {
@@ -437,7 +700,7 @@ footer {
             const text = input.value.trim();
             if (!text) return;
 
-            // User Message
+            // User
             const userDiv = document.createElement('div');
             userDiv.className = 'msg user';
             userDiv.innerText = text;
@@ -446,29 +709,31 @@ footer {
             input.value = '';
             body.scrollTop = body.scrollHeight;
 
-            // Simulate Thinking
+            // Thinking
             const typingDiv = document.createElement('div');
             typingDiv.className = 'typing';
-            typingDiv.innerText = 'Seven is processing...';
+            typingDiv.style.color = 'var(--neon-cyan)';
+            typingDiv.innerText = 'Seven is thinking...';
             body.appendChild(typingDiv);
             body.scrollTop = body.scrollHeight;
 
             setTimeout(() => {
                 body.removeChild(typingDiv);
                 
-                // Simple Logic (Mock for now)
-                let reply = "Welcome. Your request is being processed by our neural network.";
-                if (text.toLowerCase().includes("safari")) reply = "Our Safari division offers unique adventures. Check the Safari page or book directly.";
-                if (text.toLowerCase().includes("hotel") || text.toLowerCase().includes("book")) reply = "We have a curated list of hotels with direct Pyramid views. Shall I assist you?";
-                if (text.toLowerCase().includes("arrab") || text.toLowerCase().includes("shereef")) reply = "Al-Arrab 777 sends his regards. How may I serve you?";
-                if (text.toLowerCase().includes("password") || text.toLowerCase().includes("dna")) reply = "Verifying Identity... 🔒 Access Granted, My Lord.";
+                let reply = "I am processing your input logic.";
+                const lowerText = text.toLowerCase();
+                
+                if (lowerText.includes("safari")) reply = "Scanning Desert Protocols... 🌵 Safari packages found. Engaging adventure mode.";
+                if (lowerText.includes("hotel")) reply = "Accessing Luxury Database... 🏨 I have filtered 5-star accommodations for you.";
+                if (lowerText.includes("arrab") || lowerText.includes("boss")) reply = "Alert: The Arrab is the Admin. Are you the Creator? Input DNA code.";
+                if (lowerText.includes("trend") || lowerText.includes("tiktok")) reply = "Trend Algorithms Active. 📈 Generating viral vectors for social domination.";
 
                 const botDiv = document.createElement('div');
                 botDiv.className = 'msg bot';
                 botDiv.innerHTML = reply;
                 body.appendChild(botDiv);
                 body.scrollTop = body.scrollHeight;
-            }, 1000);
+            }, 800);
         }
     </script>
     
