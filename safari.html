@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>السفاري | AlArab Club 777</title>
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
 :root {
     --gold: #D4AF37;
@@ -248,6 +249,9 @@ footer {
         border: none;
         cursor: pointer;
         display: inline-block;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
     .social-btn:hover {
         opacity: 0.9;
@@ -256,7 +260,11 @@ footer {
         background: var(--gold-gradient);
         color: black;
     }
-    
+    .social-btn.disabled {
+        background: #333;
+        color: #777;
+        cursor: not-allowed;
+    }
     
     /* Seven Agent Widget */
     .seven-widget-btn {
@@ -381,71 +389,14 @@ footer {
 </head>
 <body>
     <header>
-        <a href="index.html" class="logo">AlArab Club ٧٧٧</a>
+        <a href="index.html" class="logo">AlArab Club 777</a>
         <nav>
-            <a href="index.html" class="">الرئيسية</a><a href="hotels.html" class="">الفنادق</a><a href="bazaars.html" class="">البازارات</a><a href="safari.html" class="active">السفاري</a><a href="guides.html" class="">المرشدين</a>
+            <a href="index.html" >Home</a><a href="hotels.html" >Hotels</a><a href="bazaars.html" >Bazaars</a><a href="safari.html" >Safari</a><a href="guides.html" >Guides</a>
         </nav>
     </header>
     
+    safari
     
-<div class="hero" style="padding: 3rem 1rem; background-image: none; background: #111;">
-    <h1>مغامرات السفاري</h1>
-</div>
-<div class="container">
-    
-    <div class="card">
-        <div class="card-img" style="background-image: url('https://example.com/images/camel.jpg');">
-            <div class="card-badge">Camel Riding</div>
-        </div>
-        <div class="card-content">
-            <h3>جولة جمال الأهرامات</h3>
-            <p>تجربة ركوب جمال حول أهرامات الجيزة مع مرشدين محترفين.</p>
-            <div class="card-meta">
-                <span class="price">$30/person</span>
-                <div>
-                     <a href="https://www.google.com/maps/search/?api=1&query=Giza+Pyramids,+Egypt" target="_blank" class="btn">📍 الموقع</a>
-                     <a href="https://example.com/camel" target="_blank" class="btn">🔗 الرابط</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="card">
-        <div class="card-img" style="background-color: #222;">
-            <div class="card-badge">Carriage Ride</div>
-        </div>
-        <div class="card-content">
-            <h3>رحلة حنطور نيلية</h3>
-            <p>جولة بالحنطور على كورنيش النيل.</p>
-            <div class="card-meta">
-                <span class="price">$20</span>
-                <div>
-                     <a href="https://www.google.com/maps/search/?api=1&query=Luxor,+Egypt" target="_blank" class="btn">📍 الموقع</a>
-                     
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="card">
-        <div class="card-img" style="background-color: #222;">
-            <div class="card-badge">Beach Buggy</div>
-        </div>
-        <div class="card-content">
-            <h3>مغامرة بيتش باغي</h3>
-            <p>قيادة عربات البيتش باغي في صحراء سيناء.</p>
-            <div class="card-meta">
-                <span class="price">$100</span>
-                <div>
-                     <a href="https://www.google.com/maps/search/?api=1&query=Sharm+El+Sheikh,+Egypt" target="_blank" class="btn">📍 الموقع</a>
-                     <a href="https://example.com/buggy" target="_blank" class="btn">🔗 الرابط</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-</div>
-
     
     <!-- Seven Widget -->
     <div class="seven-widget-btn" onclick="toggleSeven()">
@@ -459,14 +410,14 @@ footer {
         </div>
         <div class="seven-body" id="sevenBody">
             <div class="msg bot">
-                مرحباً بضيوف العرّاب. <br>
-                أنا "سـَبـْع" (Seven)، الذكاء الاصطناعي المسؤول هنا.<br><br>
-                يمكنك سؤالي عن السياحة، البازارات، أو أي خدمات أخرى.
+                Welcome to AlArab Club. <br>
+                I am "Seven" (7), the Guardian AI of this realm.<br><br>
+                Ask me about Tourism, Bazaars, or our Services.
             </div>
         </div>
         <div class="seven-input-area">
-            <input type="text" class="seven-input" id="sevenInput" placeholder="اكتب رسالتك هنا..." onkeypress="handleKey(event)">
-            <button class="seven-send" onclick="sendMessage()">أرسل</button>
+            <input type="text" class="seven-input" id="sevenInput" placeholder="Type your message..." onkeypress="handleKey(event)">
+            <button class="seven-send" onclick="sendMessage()">Send</button>
         </div>
     </div>
 
@@ -506,11 +457,11 @@ footer {
                 body.removeChild(typingDiv);
                 
                 // Simple Logic (Mock for now)
-                let reply = "أهلاً بك. سيتم توجيه طلبك للقسم المختص قريباً.";
-                if (text.includes("سفاري")) reply = "قسم السفاري لدينا يقدم تجارب مميزة. يمكنك زيارة صفحة السفاري أو الحجز مباشرة.";
-                if (text.includes("فنادق") || text.includes("حجز")) reply = "لدينا قائمة بأفضل الفنادق ذات الإطلالة المباشرة. هل تريد المساعدة في الاختيار؟";
-                if (text.includes("العراب") || text.includes("شريف")) reply = "العرّاب 777 يرسل لك تحياته. كيف يمكنني خدمتك؟";
-                if (text.includes("كلمة السر") || text.includes("DNA")) reply = "جاري التحقق من الهوية... 🔒";
+                let reply = "Welcome. Your request is being processed by our neural network.";
+                if (text.toLowerCase().includes("safari")) reply = "Our Safari division offers unique adventures. Check the Safari page or book directly.";
+                if (text.toLowerCase().includes("hotel") || text.toLowerCase().includes("book")) reply = "We have a curated list of hotels with direct Pyramid views. Shall I assist you?";
+                if (text.toLowerCase().includes("arrab") || text.toLowerCase().includes("shereef")) reply = "Al-Arrab 777 sends his regards. How may I serve you?";
+                if (text.toLowerCase().includes("password") || text.toLowerCase().includes("dna")) reply = "Verifying Identity... 🔒 Access Granted, My Lord.";
 
                 const botDiv = document.createElement('div');
                 botDiv.className = 'msg bot';
@@ -522,7 +473,7 @@ footer {
     </script>
     
     <footer>
-        <p>© 2024 AlArab Club 777. جميع الحقوق محفوظة.</p>
+        <p>© 2026 AlArab Club 777. All Rights Reserved.</p>
     </footer>
 </body>
 </html>
