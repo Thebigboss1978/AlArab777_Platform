@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرئيسية | AlArab Club 777</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap');
+
+:root {
+    --gold: #D4AF37;
+    --dark-green: #006400;
+    --papyrus: #F5F5DC;
+    --black: #0c0c0c;
+    --glass-bg: rgba(20, 20, 20, 0.85);
+    --gold-gradient: linear-gradient(135deg, #FFD700, #D4AF37, #C5A028);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background-color: var(--black);
+    background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 100%);
+    color: var(--papyrus);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background: rgba(0, 0, 0, 0.9);
+    border-bottom: 2px solid var(--gold);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    text-decoration: none;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 400;
+    transition: color 0.3s;
+}
+
+nav a:hover, nav a.active {
+    color: var(--gold);
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg');
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid var(--gold);
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto 2rem;
+}
+
+/* Cards Container */
+.container {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Card Style */
+.card {
+    background: var(--glass-bg);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+    border-color: var(--gold);
+}
+
+.card-img {
+    height: 200px;
+    background-color: #333;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.card-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--gold-gradient);
+    color: #000;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.card-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card h3 {
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+}
+
+.card p {
+    font-size: 0.95rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+}
+
+.card-meta {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1rem;
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.price {
+    font-weight: bold;
+    color: #fff;
+}
+
+.btn {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: var(--gold);
+    color: #000;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    background: #000;
+    border-top: 1px solid #333;
+    margin-top: 4rem;
+    color: #777;
+}
+
+    
+    /* Instagram-style Guide Card */
+    .guide-card {
+        background: var(--glass-bg);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        transition: transform 0.3s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .guide-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--gold);
+    }
+    .guide-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--gold);
+        margin-bottom: 1rem;
+        background-color: #333;
+    }
+    .guide-role {
+        color: #aaa;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .guide-name {
+        color: var(--gold);
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+    }
+    .social-btn {
+        background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
+        color: white;
+        padding: 0.8rem 2rem;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: opacity 0.3s;
+        border: none;
+        cursor: pointer;
+        display: inline-block;
+    }
+    .social-btn:hover {
+        opacity: 0.9;
+    }
+    .social-btn.default {
+        background: var(--gold-gradient);
+        color: black;
+    }
+    
+    
+    /* Seven Agent Widget */
+    .seven-widget-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 70px;
+        height: 70px;
+        background: radial-gradient(circle, #D4AF37 0%, #8a6e1e 100%);
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+        cursor: pointer;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        animation: pulse-gold 3s infinite;
+    }
+    .seven-widget-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.9);
+    }
+    @keyframes pulse-gold {
+        0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+        70% { box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+    }
+    .seven-icon {
+        font-size: 35px;
+        color: #000;
+    }
+    
+    /* Chat Window */
+    .seven-chat-window {
+        position: fixed;
+        bottom: 110px;
+        right: 30px;
+        width: 350px;
+        height: 500px;
+        background: rgba(10, 10, 10, 0.95);
+        border: 1px solid var(--gold);
+        border-radius: 15px;
+        display: none;
+        flex-direction: column;
+        z-index: 1000;
+        box-shadow: -5px 10px 40px rgba(0,0,0,0.8);
+        backdrop-filter: blur(15px);
+        overflow: hidden;
+    }
+    .seven-header {
+        background: linear-gradient(90deg, #111, #222);
+        padding: 15px;
+        border-bottom: 2px solid var(--gold);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .seven-title {
+        color: var(--gold);
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+        letter-spacing: 2px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .seven-status {
+        width: 10px;
+        height: 10px;
+        background-color: #0f0;
+        border-radius: 50%;
+        box-shadow: 0 0 5px #0f0;
+    }
+    .seven-body {
+        flex-grow: 1;
+        padding: 15px;
+        overflow-y: auto;
+        color: var(--papyrus);
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        background-image: linear-gradient(rgba(0, 100, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 100, 0, 0.05) 1px, transparent 1px);
+        background-size: 20px 20px;
+    }
+    .seven-input-area {
+        padding: 15px;
+        border-top: 1px solid #333;
+        display: flex;
+        gap: 10px;
+    }
+    .seven-input {
+        flex-grow: 1;
+        background: #000;
+        border: 1px solid #444;
+        color: var(--gold);
+        padding: 10px;
+        border-radius: 5px;
+        outline: none;
+        font-family: 'Cairo', sans-serif;
+    }
+    .seven-input:focus {
+        border-color: var(--gold);
+    }
+    .seven-send {
+        background: var(--gold);
+        border: none;
+        color: #000;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    
+    /* Messages */
+    .msg { margin-bottom: 10px; padding: 10px; border-radius: 8px; max-width: 80%; }
+    .msg.bot { background: rgba(0, 100, 0, 0.2); border-left: 3px solid var(--gold); align-self: flex-start; }
+    .msg.user { background: rgba(212, 175, 55, 0.1); border-right: 3px solid var(--gold); align-self: flex-end; margin-left: auto; text-align: right; }
+    .typing { font-style: italic; color: #555; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">AlArab Club ٧٧٧</a>
+        <nav>
+            <a href="index.html" class="active">الرئيسية</a><a href="hotels.html" class="">الفنادق</a><a href="bazaars.html" class="">البازارات</a><a href="safari.html" class="">السفاري</a><a href="guides.html" class="">المرشدين</a>
+        </nav>
+    </header>
+    
+    
+<div class="hero">
+    <h1>اكتشف سحر مصر</h1>
+    <p>بوابة AlArab Club 777 لتجربة سياحية فرعونية لا تُنسى. فنادق، بازارات، ومغامرات سفاري.</p>
+    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <a href="safari.html" class="btn" style="font-size:1.2rem; padding: 1rem 2rem;">ابدأ المغامرة</a>
+        <a href="guides.html" class="btn" style="font-size:1.2rem; padding: 1rem 2rem; background:var(--gold); color:black;">المرشدين السياحيين</a>
+    </div>
+</div>
+<div class="container">
+    <div class="card" style="text-align:center;">
+        <div class="card-content">
+            <h3>🏨 الفنادق</h3>
+            <p>أفضل أماكن الإقامة بإطلالات ساحرة على الأهرامات.</p>
+            <a href="hotels.html" class="btn">تصفح الفنادق</a>
+        </div>
+    </div>
+    <div class="card" style="text-align:center;">
+        <div class="card-content">
+            <h3>🐫 السفاري</h3>
+            <p>مغامرات الصحراء، ركوب الخيل والجمال.</p>
+            <a href="safari.html" class="btn">تصفح السفاري</a>
+        </div>
+    </div>
+    <div class="card" style="text-align:center;">
+        <div class="card-content">
+            <h3>🏺 البازارات</h3>
+            <p>تسوق التحف والهدايا التذكارية من قلب التاريخ.</p>
+            <a href="bazaars.html" class="btn">تصفح البازارات</a>
+        </div>
+    </div>
+        <div class="card" style="text-align:center;">
+        <div class="card-content">
+            <h3>👲 المرشدين</h3>
+            <p>نخبة من أفضل المرشدين السياحيين لخدمتك.</p>
+            <a href="guides.html" class="btn">تعرف عليهم</a>
+        </div>
+    </div>
+</div>
+
+    
+    <!-- Seven Widget -->
+    <div class="seven-widget-btn" onclick="toggleSeven()">
+        <span class="seven-icon">👁️</span>
+    </div>
+    
+    <div class="seven-chat-window" id="sevenChat">
+        <div class="seven-header">
+            <div class="seven-title"><div class="seven-status"></div> SEVEN | 777</div>
+            <button onclick="toggleSeven()" style="background:none;border:none;color:var(--gold);font-size:1.2rem;cursor:pointer;">×</button>
+        </div>
+        <div class="seven-body" id="sevenBody">
+            <div class="msg bot">
+                مرحباً بضيوف العرّاب. <br>
+                أنا "سـَبـْع" (Seven)، الذكاء الاصطناعي المسؤول هنا.<br><br>
+                يمكنك سؤالي عن السياحة، البازارات، أو أي خدمات أخرى.
+            </div>
+        </div>
+        <div class="seven-input-area">
+            <input type="text" class="seven-input" id="sevenInput" placeholder="اكتب رسالتك هنا..." onkeypress="handleKey(event)">
+            <button class="seven-send" onclick="sendMessage()">أرسل</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleSeven() {
+            const chat = document.getElementById('sevenChat');
+            chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function handleKey(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('sevenInput');
+            const body = document.getElementById('sevenBody');
+            const text = input.value.trim();
+            if (!text) return;
+
+            // User Message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'msg user';
+            userDiv.innerText = text;
+            body.appendChild(userDiv);
+            
+            input.value = '';
+            body.scrollTop = body.scrollHeight;
+
+            // Simulate Thinking
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing';
+            typingDiv.innerText = 'Seven is processing...';
+            body.appendChild(typingDiv);
+            body.scrollTop = body.scrollHeight;
+
+            setTimeout(() => {
+                body.removeChild(typingDiv);
+                
+                // Simple Logic (Mock for now)
+                let reply = "أهلاً بك. سيتم توجيه طلبك للقسم المختص قريباً.";
+                if (text.includes("سفاري")) reply = "قسم السفاري لدينا يقدم تجارب مميزة. يمكنك زيارة صفحة السفاري أو الحجز مباشرة.";
+                if (text.includes("فنادق") || text.includes("حجز")) reply = "لدينا قائمة بأفضل الفنادق ذات الإطلالة المباشرة. هل تريد المساعدة في الاختيار؟";
+                if (text.includes("العراب") || text.includes("شريف")) reply = "العرّاب 777 يرسل لك تحياته. كيف يمكنني خدمتك؟";
+                if (text.includes("كلمة السر") || text.includes("DNA")) reply = "جاري التحقق من الهوية... 🔒";
+
+                const botDiv = document.createElement('div');
+                botDiv.className = 'msg bot';
+                botDiv.innerHTML = reply;
+                body.appendChild(botDiv);
+                body.scrollTop = body.scrollHeight;
+            }, 1000);
+        }
+    </script>
+    
+    <footer>
+        <p>© 2024 AlArab Club 777. جميع الحقوق محفوظة.</p>
+    </footer>
+</body>
+</html>
