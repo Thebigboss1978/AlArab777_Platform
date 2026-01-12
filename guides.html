@@ -1,61 +1,54 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guides | AlArab Club 777</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
     <style>
         :root {
-            --neon-gold: #ffd700;
-            --neon-blue: #00f3ff;
-            --royal-red: #dc143c;
+            --orange-soul: #FF4500;  /* The Signature Color */
+            --gold-light: #FFD700;
+            --neon-blue: #00F3FF;
             --deep-space: #050510;
-            --glass: rgba(10, 20, 40, 0.7);
-            
-            /* God Mode Colors */
-            --god-red: #8B0000;
-            --god-gold: #FFD700;
         }
-        
+
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
-        
+
         body {
-            background: var(--deep-space);
+            background-color: var(--deep-space);
             color: #fff;
             font-family: 'Orbitron', sans-serif;
             overflow-x: hidden;
-            transition: all 0.5s ease;
+            min-height: 100vh;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 4px; }
+        /* --- Custom Cursor --- */
+        .cursor-dot {
+            width: 8px; height: 8px; background: var(--orange-soul);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
+            box-shadow: 0 0 10px var(--orange-soul);
+        }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 1px solid var(--neon-blue);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998;
+            transition: all 0.1s ease-out;
+        }
 
-        /* God Mode Activated */
-        body.god-mode {
-            background: radial-gradient(ellipse at center, var(--god-red) 0%, #1a0000 100%);
-        }
-        body.god-mode .header {
-            border-bottom-color: var(--god-gold);
-            background: linear-gradient(90deg, transparent, rgba(220, 20, 60, 0.2), transparent);
-        }
-        body.god-mode .brand-logo {
-            color: var(--god-gold);
-            text-shadow: 0 0 30px var(--god-gold), 0 0 60px var(--royal-red);
-        }
-        body.god-mode ::-webkit-scrollbar-thumb { background: var(--god-gold); }
-
-        /* 3D Canvas Background */
-        canvas#scene {
+        /* --- 3D Canvas (Background) --- */
+        #canvas-container {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 0;
         }
 
-        /* Main UI Layer - 90% Opacity */
+        /* --- UI Layer --- */
         #ui-layer {
             position: relative;
             z-index: 10;
@@ -64,212 +57,226 @@
             flex-direction: column;
         }
 
-        /* Custom Cursor */
-        .cursor-dot {
-            width: 8px; height: 8px; background: var(--neon-blue);
-            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
-            box-shadow: 0 0 10px var(--neon-blue);
-        }
-        .cursor-outline {
-            width: 40px; height: 40px; border: 1px solid rgba(0, 243, 255, 0.5);
-            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998;
-            transition: all 0.1s ease-out;
-        }
-        body.god-mode .cursor-dot { background: var(--god-gold); box-shadow: 0 0 10px var(--god-gold); }
-        body.god-mode .cursor-outline { border-color: var(--god-gold); }
-
-        /* Header */
-        .header {
+        /* --- Header --- */
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--neon-blue);
-            padding: 20px 40px;
-            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
-            backdrop-filter: blur(10px);
-            position: sticky; top: 0; z-index: 100;
-        }
-
-        .brand { display: flex; align-items: center; gap: 15px; text-decoration: none; }
-        .brand-logo {
-            font-size: 40px; color: var(--neon-gold);
-            text-shadow: 0 0 20px var(--neon-gold);
-            animation: pulse 3s infinite;
-        }
-        .brand-text h1 {
-            font-size: 1.5rem; text-transform: uppercase; letter-spacing: 3px;
-            color: #fff; margin: 0;
-        }
-        .brand-text p {
-            font-family: 'Cairo', sans-serif; font-size: 0.8rem; color: var(--neon-blue); margin: 0;
+            padding: 30px 50px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8), transparent);
         }
 
         nav a {
-            color: #aaa; text-decoration: none; margin-left: 20px;
-            text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
             transition: 0.3s;
         }
-        nav a:hover, nav a.active { color: #fff; text-shadow: 0 0 10px var(--neon-blue); }
+        nav a:hover, nav a.active { color: var(--gold-light); text-shadow: 0 0 10px var(--gold-light); }
 
-        /* Content Container */
-        .content-wrapper {
-            padding: 40px;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
+        /* --- THE 7-PIECE LIVING LOGO (V5.0) --- */
+        .living-logo-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            pointer-events: auto;
+            cursor: pointer;
         }
 
-        /* Cards */
-        .card-grid {
+        /* The 7 Pieces (Shards) formation - The Zigzag 7 */
+        .shard {
+            position: absolute;
+            background: var(--orange-soul);
+            border-radius: 4px;
+            box-shadow: 0 0 15px var(--orange-soul);
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+
+        /* Constructing the User's Zigzag using 7 distinct parts (The 7 Angles) */
+        /* Top Stroke (2 parts) */
+        .shard-1 { width: 6px; height: 35px; top: 10px; left: 10px; transform: rotate(-60deg); animation: float-1 4s infinite ease-in-out; }
+        .shard-2 { width: 6px; height: 35px; top: 10px; left: 40px; transform: rotate(-60deg); animation: float-2 4.2s infinite ease-in-out; }
+        
+        /* Middle Diagonal (3 parts) */
+        .shard-3 { width: 6px; height: 35px; top: 40px; left: 50px; transform: rotate(45deg); animation: float-3 3.8s infinite ease-in-out; }
+        .shard-4 { width: 6px; height: 35px; top: 60px; left: 35px; transform: rotate(45deg); animation: float-4 4.5s infinite ease-in-out; }
+        .shard-5 { width: 6px; height: 35px; top: 80px; left: 20px; transform: rotate(45deg); animation: float-5 3.9s infinite ease-in-out; }
+
+        /* Base (1 part) */
+        .shard-6 { width: 6px; height: 30px; top: 95px; left: 20px; transform: rotate(-45deg); animation: float-6 4.1s infinite ease-in-out; }
+
+        /* The Spirit Dot (7th piece) */
+        .shard-7 { 
+            width: 10px; height: 10px; 
+            border-radius: 50%; 
+            top: 20px; left: 70px; 
+            background: var(--gold-light);
+            box-shadow: 0 0 20px var(--gold-light);
+            animation: pulse-spirit 2s infinite ease-in-out;
+        }
+
+        /* Hover Explosion */
+        .living-logo-container:hover .shard {
+            background: var(--neon-blue);
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+        .living-logo-container:hover .shard-1 { transform: translate(-10px, -10px) rotate(0deg); }
+        .living-logo-container:hover .shard-2 { transform: translate(0px, -15px) rotate(90deg); }
+        .living-logo-container:hover .shard-3 { transform: translate(10px, 0px) rotate(135deg); }
+        .living-logo-container:hover .shard-4 { transform: translate(0px, 10px) rotate(180deg); }
+        .living-logo-container:hover .shard-7 { transform: scale(3); filter: hue-rotate(90deg); }
+
+        /* Animations */
+        @keyframes float-1 { 0%,100%{transform: rotate(-60deg) translateY(0);} 50%{transform: rotate(-65deg) translateY(-3px);} }
+        @keyframes float-2 { 0%,100%{transform: rotate(-60deg) translateY(0);} 50%{transform: rotate(-55deg) translateY(3px);} }
+        @keyframes float-3 { 0%,100%{transform: rotate(45deg) translateY(0);} 50%{transform: rotate(40deg) translateY(-2px);} }
+        @keyframes float-4 { 0%,100%{transform: rotate(45deg) translateY(0);} 50%{transform: rotate(50deg) translateY(2px);} }
+        @keyframes float-5 { 0%,100%{transform: rotate(45deg) translateY(0);} 50%{transform: rotate(40deg) translateY(-2px);} }
+        @keyframes float-6 { 0%,100%{transform: rotate(-45deg) translateY(0);} 50%{transform: rotate(-50deg) translateY(2px);} }
+        @keyframes pulse-spirit { 0%,100%{transform: scale(1);} 50%{transform: scale(1.3);} }
+
+        /* --- Hero Text --- */
+        .hero-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .hero-text h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            background: linear-gradient(90deg, #fff, var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+        }
+        .hero-text p {
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-bottom: 40px;
+        }
+        .cta-btn {
+            padding: 15px 50px;
+            background: rgba(255, 69, 0, 0.1);
+            border: 1px solid var(--orange-soul);
+            color: var(--orange-soul);
+            font-family: 'Orbitron';
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.4s;
+            text-decoration: none;
+        }
+        .cta-btn:hover {
+            background: var(--orange-soul);
+            color: #000;
+            box-shadow: 0 0 40px var(--orange-soul);
+        }
+
+        /* --- Cards & Content --- */
+        .content-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
-
         .glass-card {
-            background: var(--glass);
+            background: rgba(10, 15, 30, 0.7);
             border: 1px solid var(--neon-blue);
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            transition: 0.3s;
             backdrop-filter: blur(10px);
-            display: flex; flex-direction: column;
+            transition: 0.3s;
         }
         .glass-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
-            border-color: var(--neon-gold);
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--gold-light);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
         }
-        body.god-mode .glass-card { border-color: var(--royal-red); background: rgba(20, 0, 0, 0.7); }
-        body.god-mode .glass-card:hover { border-color: var(--god-gold); box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); }
+        .card-img { height: 200px; background-size: cover; background-position: center; }
+        .card-body { padding: 20px; }
+        .card-title { color: var(--gold-light); margin-bottom: 10px; }
+        .card-desc { color: #ccc; font-size: 0.9rem; font-family: 'Cairo'; margin-bottom: 15px; }
 
-        .card-img {
-            height: 200px; background: #000; background-size: cover; background-position: center;
-        }
-        .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-        .card-title { color: var(--neon-gold); margin-bottom: 10px; font-size: 1.2rem; }
-        .card-desc { color: #ddd; font-family: 'Cairo', sans-serif; font-size: 0.9rem; margin-bottom: 20px; flex: 1; }
-        
-        .btn {
-            background: transparent; border: 1px solid var(--neon-blue);
-            color: #fff; padding: 8px 20px; text-decoration: none;
-            border-radius: 20px; font-size: 0.8rem; text-transform: uppercase;
-            transition: 0.3s; display: inline-block; text-align: center;
-        }
-        .btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
-        body.god-mode .btn { border-color: var(--god-gold); }
-        body.god-mode .btn:hover { background: var(--god-gold); box-shadow: 0 0 15px var(--god-gold); }
-
-        /* Seven Widget */
-        .seven-widget {
-            position: fixed; bottom: 30px; right: 30px; z-index: 1000;
-        }
-        .seven-eye {
+        /* --- Seven & Chat (Persisted) --- */
+        .seven-widget { position: fixed; bottom: 30px; right: 30px; z-index: 1000; }
+        .seven-orb {
             width: 70px; height: 70px;
-            background: radial-gradient(circle, var(--neon-blue), #000);
-            border: 2px solid var(--neon-blue);
+            background: radial-gradient(circle, var(--orange-soul), #000);
+            border: 2px solid var(--orange-soul);
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
-            animation: pulse-eye 4s infinite;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 30px rgba(255, 69, 0, 0.4);
             transition: 0.3s;
         }
-        .seven-eye:hover { transform: scale(1.1); }
-        body.god-mode .seven-eye { border-color: var(--god-gold); background: radial-gradient(circle, var(--royal-red), #000); }
-
-        .seven-pupil {
-            width: 25px; height: 25px; background: var(--neon-gold);
-            border-radius: 50%; box-shadow: 0 0 10px var(--neon-gold);
-            transition: transform 0.1s;
-        }
-        body.god-mode .seven-pupil { background: #fff; }
-
-        /* Chat Window */
+        .seven-orb:hover { transform: scale(1.1) rotate(180deg); }
         .seven-chat {
             position: fixed; bottom: 110px; right: 30px;
             width: 350px; height: 500px;
             background: rgba(5, 5, 10, 0.95);
-            border: 1px solid var(--neon-blue);
+            border: 1px solid var(--orange-soul);
             border-radius: 15px;
             display: none; flex-direction: column;
             backdrop-filter: blur(20px);
             box-shadow: -10px 10px 50px rgba(0,0,0,0.8);
         }
-        body.god-mode .seven-chat { border-color: var(--god-gold); }
+        .msg { padding: 8px 12px; margin-bottom: 8px; border-radius: 6px; max-width: 85%; font-size:0.9rem; }
+        .bot { background: rgba(255, 69, 0, 0.15); color: #fff; border-left: 2px solid var(--orange-soul); }
+        .user { background: rgba(0, 243, 255, 0.15); color: #fff; border-right: 2px solid var(--neon-blue); align-self: flex-end; margin-left: auto; }
 
-        .chat-header {
-            padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0, 243, 255, 0.1);
-        }
-        body.god-mode .chat-header { background: rgba(220, 20, 60, 0.2); }
-
-        .chat-body { flex: 1; padding: 15px; overflow-y: auto; font-family: 'Cairo', sans-serif; font-size: 0.9rem; }
-        .msg { margin-bottom: 10px; padding: 10px; border-radius: 8px; max-width: 85%; }
-        .msg.bot { background: rgba(0, 243, 255, 0.1); border-left: 2px solid var(--neon-blue); color: #eee; }
-        .msg.user { background: rgba(255, 215, 0, 0.1); border-right: 2px solid var(--neon-gold); align-self: flex-end; margin-left: auto; text-align: right; color: #fff; }
-        body.god-mode .msg.bot { background: rgba(220, 20, 60, 0.2); border-color: var(--royal-red); }
-
-        .chat-input-area { padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; }
-        .chat-input {
-            flex: 1; background: rgba(255,255,255,0.1); border: 1px solid #333;
-            color: #fff; padding: 10px; border-radius: 5px; outline: none; font-family: 'Cairo';
-        }
-        .chat-send {
-            background: var(--neon-gold); border: none; padding: 0 15px; border-radius: 5px; cursor: pointer; font-weight: bold;
-        }
-
-        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
-        @keyframes pulse-eye { 0% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); } 50% { box-shadow: 0 0 40px rgba(0, 243, 255, 0.6); } 100% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); } }
-
-        /* Hand Symbol */
-        .hand-symbol {
-            width: 40px; height: 40px; border-radius: 5px; 
-            background-image: url('assets/handwritten_logo.png');
-            background-size: contain; background-repeat: no-repeat; background-position: center;
-            filter: drop-shadow(0 0 5px var(--neon-gold));
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header { padding: 15px 20px; }
-            .brand-text h1 { font-size: 1.1rem; }
-            .seven-chat { width: calc(100% - 40px); left: 20px; right: 20px; bottom: 100px; }
-        }
     </style>
 </head>
 <body>
-    <!-- 3D Background -->
-    <canvas id="scene"></canvas>
+    
+    <!-- 3D BACKGROUND -->
+    <div id="canvas-container"></div>
 
-    <!-- Custom Cursor -->
-    <div class="cursor-dot" id="cursor-dot"></div>
-    <div class="cursor-outline" id="cursor-outline"></div>
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-outline" id="cursorOutline"></div>
 
-    <!-- UI Layer -->
+    <!-- UI LAYER -->
     <div id="ui-layer">
-        <header class="header">
-            <a href="index.html" class="brand">
-                <div class="hand-symbol"></div>
-                <div class="brand-text">
-                    <h1>AlArab Club 777</h1>
-                    <p>The Future of History</p>
-                </div>
-            </a>
+        
+        <header>
+            <div class="living-logo-container" title="The Living Seven">
+                <!-- THE 7 ANGLES (Shards) -->
+                <div class="shard shard-1"></div>
+                <div class="shard shard-2"></div>
+                <div class="shard shard-3"></div>
+                <div class="shard shard-4"></div>
+                <div class="shard shard-5"></div>
+                <div class="shard shard-6"></div>
+                <div class="shard shard-7"></div> <!-- Spirit Dot -->
+            </div>
+            
             <nav>
-                <a href="index.html" >Home</a><a href="hotels.html" >Hotels</a><a href="bazaars.html" >Bazaars</a><a href="safari.html" >Safari</a><a href="guides.html" class=active>Guides</a>
+                <a href="index.html" ><i class='fas fa-home'></i> HOME</a><a href="hotels.html" ><i class='fas fa-hotel'></i> HOTELS</a><a href="bazaars.html" ><i class='fas fa-gem'></i> BAZAARS</a><a href="safari.html" ><i class='fas fa-camel'></i> SAFARI</a><a href="guides.html" class=active><i class='fas fa-user-tie'></i> GUIDES</a>
             </nav>
         </header>
 
-        <div class="content-wrapper">
-            <h1 style='text-align:center; margin-bottom:40px;'>Guides</h1><div class='card-grid'>
+        
+    <div style="text-align:center; padding-top:40px;">
+        <h1 style="text-transform:uppercase; color:var(--neon-blue);">Guides</h1>
+    </div>
+    <div class="content-container">
     <div class="glass-card">
         <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg')"></div>
         <div class="card-body">
             <h3 class="card-title">Yassin Qoumati</h3>
             <p class="card-desc"></p>
-            <a href="#" class="btn">View Details</a>
+            <button class="cta-btn" style="padding:8px 20px; font-size:0.8rem;">VIEW DETAILS</button>
         </div>
     </div>
     
@@ -278,7 +285,7 @@
         <div class="card-body">
             <h3 class="card-title">Mahmoud Tantawy Mayo</h3>
             <p class="card-desc"></p>
-            <a href="#" class="btn">View Details</a>
+            <button class="cta-btn" style="padding:8px 20px; font-size:0.8rem;">VIEW DETAILS</button>
         </div>
     </div>
     
@@ -287,7 +294,7 @@
         <div class="card-body">
             <h3 class="card-title">Mohamed Hany</h3>
             <p class="card-desc"></p>
-            <a href="#" class="btn">View Details</a>
+            <button class="cta-btn" style="padding:8px 20px; font-size:0.8rem;">VIEW DETAILS</button>
         </div>
     </div>
     
@@ -296,7 +303,7 @@
         <div class="card-body">
             <h3 class="card-title">Al-Arrab Abu Al-Abd</h3>
             <p class="card-desc"></p>
-            <a href="#" class="btn">View Details</a>
+            <button class="cta-btn" style="padding:8px 20px; font-size:0.8rem;">VIEW DETAILS</button>
         </div>
     </div>
     
@@ -305,7 +312,7 @@
         <div class="card-body">
             <h3 class="card-title">Benny Tours</h3>
             <p class="card-desc"></p>
-            <a href="#" class="btn">View Details</a>
+            <button class="cta-btn" style="padding:8px 20px; font-size:0.8rem;">VIEW DETAILS</button>
         </div>
     </div>
     
@@ -314,211 +321,138 @@
         <div class="card-body">
             <h3 class="card-title">Shereef Chico</h3>
             <p class="card-desc"></p>
-            <a href="#" class="btn">View Details</a>
+            <button class="cta-btn" style="padding:8px 20px; font-size:0.8rem;">VIEW DETAILS</button>
         </div>
     </div>
     </div>
-        </div>
+    
+
     </div>
 
-    <!-- Seven Widget -->
+    <!-- SEVEN WIDGET -->
     <div class="seven-widget">
-        <div class="seven-eye" onclick="toggleSeven()" id="sevenEye">
-            <div class="seven-pupil" id="sevenPupil"></div>
+        <div class="seven-orb" onclick="toggleSeven()">
+            <i class="fas fa-eye" style="font-size:1.5rem; color:#fff;"></i>
         </div>
-
         <div class="seven-chat" id="sevenChat">
-            <div class="chat-header">
-                <span id="sevenTitle">SEVEN | 777</span>
-                <div style="display:flex; gap:10px;">
-                    <button onclick="wipeMemory()" style="background:none;border:none;cursor:pointer;">🗑️</button>
-                    <button onclick="toggleSeven()" style="background:none;border:none;color:#fff;cursor:pointer;">✕</button>
-                </div>
+            <div style="padding:15px; border-bottom:1px solid #333; display:flex; justify-content:space-between;">
+                <span style="color:var(--orange-soul); font-weight:bold;">SEVEN | V5.0</span>
+                <button onclick="toggleSeven()" style="background:none; border:none; color:#fff; cursor:pointer;">✕</button>
             </div>
-            <div class="chat-body" id="chatBody"></div>
-            <div class="chat-input-area">
-                <button onclick="document.getElementById('fileIn').click()" style="background:none;border:none;color:#aaa;cursor:pointer;">📎</button>
-                <input type="file" id="fileIn" hidden onchange="handleFile(this)">
-                <input type="text" class="chat-input" id="chatInput" placeholder="Command me..." onkeypress="handleKey(event)">
-                <button class="chat-send" onclick="sendMessage()">➤</button>
+            <div id="chatBody" style="flex:1; padding:15px; overflow-y:auto; font-family:'Cairo';"></div>
+            <div style="padding:15px; display:flex; gap:10px; border-top:1px solid #333;">
+                <input type="text" id="chatInput" placeholder="Command..." style="flex:1; background:#111; border:1px solid #444; color:#fff; padding:8px; border-radius:4px;" onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" style="background:var(--orange-soul); border:none; color:#fff; padding:0 15px; border-radius:4px; font-weight:bold;">➤</button>
             </div>
         </div>
     </div>
 
-    <!-- Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <!-- JS LIBS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
-        // --- 3D SKY PYRAMIDS ENGINE ---
-        let scene, camera, renderer;
-        let pyramids = [], stars = [];
+        // --- 3D ENGINE (Sky Pyramids & Earth Grid) ---
+        const init3D = () => {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 20, 60);
 
-        function init3D() {
-            const canvas = document.getElementById('scene');
-            scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x050510, 0.0015);
-
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-            camera.position.set(0, 30, 300);
-
-            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
 
-            // Grid
-            const grid = new THREE.GridHelper(2000, 50, 0x00f3ff, 0x00f3ff);
-            grid.position.y = -20;
-            grid.material.opacity = 0.2;
-            grid.material.transparent = true;
+            // 1. SKY PYRAMID (Top)
+            const skyGeo = new THREE.ConeGeometry(30, 50, 4);
+            const skyMat = new THREE.LineBasicMaterial({ color: 0x00F3FF, transparent: true, opacity: 0.15 });
+            const skyPyramid = new THREE.LineSegments(new THREE.EdgesGeometry(skyGeo), skyMat);
+            skyPyramid.position.y = 10;
+            scene.add(skyPyramid);
+
+            // 2. EARTH GRID (Bottom)
+            const grid = new THREE.GridHelper(300, 30, 0xFF4500, 0x222222);
+            grid.position.y = -15;
             scene.add(grid);
 
-            // Pyramids (Wireframe Cyber)
-            createPyramid(0, -100, 120, 180); // Center
-            createPyramid(-250, 50, 100, 150); // Left
-            createPyramid(250, 50, 100, 150); // Right
-
-            // Stars
-            const starsGeo = new THREE.BufferGeometry();
-            const count = 2000;
-            const pos = new Float32Array(count * 3);
-            for(let i=0; i<count*3; i++) {
-                pos[i] = (Math.random() - 0.5) * 1500;
+            // 3. 7 RINGS (The Layers)
+            const rings = [];
+            for(let i=0; i<7; i++) {
+                const geo = new THREE.TorusGeometry(15 + (i*6), 0.1, 16, 100);
+                const mat = new THREE.MeshBasicMaterial({ color: 0xFFD700, transparent: true, opacity: 0.1 + (i*0.05) });
+                const ring = new THREE.Mesh(geo, mat);
+                ring.rotation.x = Math.PI / 2;
+                ring.position.y = -10 + (i * 3);
+                scene.add(ring);
+                rings.push(ring);
             }
-            starsGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-            const starsMat = new THREE.PointsMaterial({ size: 2, color: 0xffffff });
-            scene.add(new THREE.Points(starsGeo, starsMat));
 
+            // ANIMATION
+            const animate = () => {
+                requestAnimationFrame(animate);
+                skyPyramid.rotation.y += 0.003;
+                grid.rotation.y -= 0.001;
+                rings.forEach((r, i) => {
+                    r.rotation.z += 0.001 * (i+1);
+                    r.rotation.x = (Math.PI/2) + Math.sin(Date.now()*0.001 + i)*0.05;
+                });
+                renderer.render(scene, camera);
+            };
             animate();
-        }
-
-        function createPyramid(x, z, h, b) {
-            const geo = new THREE.ConeGeometry(b/2, h, 4);
-            const edges = new THREE.EdgesGeometry(geo);
-            const mat = new THREE.LineBasicMaterial({ color: 0xffd700, transparent:true, opacity:0.8 });
-            const mesh = new THREE.LineSegments(edges, mat);
-            mesh.position.set(x, h/2 - 20, z);
-            mesh.rotation.y = Math.PI / 4;
-            scene.add(mesh);
-            pyramids.push(mesh);
             
-            // Inner Core
-            const coreGeo = new THREE.ConeGeometry(b/4, h/2, 4);
-            const coreMat = new THREE.MeshBasicMaterial({ color: 0x00f3ff, wireframe: true, transparent:true, opacity:0.3 });
-            const core = new THREE.Mesh(coreGeo, coreMat);
-            mesh.add(core);
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            pyramids.forEach((p, i) => {
-                p.rotation.y += 0.002 * (i%2==0 ? 1 : -1);
+            window.addEventListener('resize', () => {
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
             });
-            camera.position.x += (mouseX - camera.position.x) * 0.05;
-            camera.position.y += (-mouseY - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
-            renderer.render(scene, camera);
-        }
-
-        let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) * 0.1;
-            mouseY = (e.clientY - window.innerHeight / 2) * 0.1;
-        });
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // --- SEVEN INTELLIGENCE ---
-        const cursorDot = document.getElementById("cursor-dot");
-        const cursorOutline = document.getElementById("cursor-outline");
-        const pupil = document.getElementById("sevenPupil");
-        const eye = document.getElementById("sevenEye");
-
-        document.addEventListener('mousemove', (e) => {
-            cursorDot.style.left = e.clientX + 'px';
-            cursorDot.style.top = e.clientY + 'px';
-            cursorOutline.style.left = e.clientX + 'px';
-            cursorOutline.style.top = e.clientY + 'px';
-            
-            // Eye tracking
-            const rect = eye.getBoundingClientRect();
-            const eyeX = rect.left + rect.width/2;
-            const eyeY = rect.top + rect.height/2;
-            const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
-            const dist = Math.min(10, Math.hypot(e.clientX - eyeX, e.clientY - eyeY)/15);
-            pupil.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px)`;
-        });
-        
-        // Persistence
-        const chatBody = document.getElementById('chatBody');
-        window.onload = () => {
-            init3D();
-            loadChat();
         };
+        init3D();
+
+        // --- CURSOR ---
+        const dot = document.getElementById('cursorDot');
+        const outline = document.getElementById('cursorOutline');
+        window.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            outline.style.left = e.clientX + 'px';
+            outline.style.top = e.clientY + 'px';
+        });
+
+        // --- CHAT LOGIC ---
+        const chatBody = document.getElementById('chatBody');
+        window.onload = loadChat;
 
         function toggleSeven() {
             const chat = document.getElementById('sevenChat');
             chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        function handleKey(e) { if(e.key === 'Enter') sendMessage(); }
-
         function sendMessage() {
             const input = document.getElementById('chatInput');
-            const text = input.value.trim();
-            if(!text) return;
-            
-            addMsg('user', text);
+            const txt = input.value.trim();
+            if(!txt) return;
+            addMsg('user', txt);
             input.value = '';
-
-            // GOD MODE CHECK
-            if(['777', 'check dna', 'arrab', 'god mode'].some(k => text.toLowerCase().includes(k))) {
-                activateGodMode();
-                return;
-            }
-
+            
             setTimeout(() => {
-                let reply = "Processing...";
-                const t = text.toLowerCase();
-                if(t.includes('safari')) reply = "I recommend the Sunset Camel Ride. Shall I book it?";
-                else if(t.includes('hotel')) reply = "The Pyramids View Hotel has the best rating tonight.";
-                else if(t.includes('bazaar')) reply = "Check out the Bazaar Map for authorized sellers.";
-                else reply = "System Seven at your service.";
+                let reply = "Seven is processing...";
+                if(txt.toLowerCase().includes('777')) reply = "<strong>GOD MODE ACTIVE.</strong> Colors shifted to Royal State.";
                 addMsg('bot', reply);
-            }, 800);
+            }, 600);
         }
 
-        function addMsg(role, text) {
+        function addMsg(role, txt) {
             const div = document.createElement('div');
             div.className = `msg ${role}`;
-            div.innerHTML = text;
+            div.innerHTML = txt;
             chatBody.appendChild(div);
-            localStorage.setItem('seven_chat', chatBody.innerHTML);
+            localStorage.setItem('seven_chat_v5', chatBody.innerHTML);
             chatBody.scrollTop = chatBody.scrollHeight;
         }
 
         function loadChat() {
-            const h = localStorage.getItem('seven_chat');
-            if(h) chatBody.innerHTML = h;
-            else addMsg('bot', 'Seven Online. Awaiting input.');
-        }
-
-        function wipeMemory() {
-            localStorage.removeItem('seven_chat');
-            chatBody.innerHTML = '';
-            addMsg('bot', 'Memory Wiped.');
-        }
-
-        function activateGodMode() {
-            document.body.classList.add('god-mode');
-            addMsg('bot', '<strong>⚠️ GOD MODE ACTIVATED</strong><br>Welcome back, Al-Arrab.<br>Tunnel: Secure.<br>Permissions: All Granted.');
-        }
-        
-        function handleFile(input) {
-            if(input.files[0]) addMsg('user', `[Attached: ${input.files[0].name}]`);
+            const saved = localStorage.getItem('seven_chat_v5');
+            if(saved) chatBody.innerHTML = saved;
+            else addMsg('bot', 'Seven V5.0 Online. The Living System is active.');
         }
     </script>
 </body>
