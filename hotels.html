@@ -2,840 +2,497 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Hotels | AlArab Club 777</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+        :root {
+            --neon-gold: #ffd700;
+            --neon-blue: #00f3ff;
+            --royal-red: #dc143c;
+            --deep-space: #050510;
+            --glass: rgba(10, 20, 40, 0.7);
+            
+            /* God Mode Colors */
+            --god-red: #8B0000;
+            --god-gold: #FFD700;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        
+        body {
+            background: var(--deep-space);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            overflow-x: hidden;
+            transition: all 0.5s ease;
+        }
 
-:root {
-    --neon-cyan: #00E5FF;
-    --neon-orange: #FF5E00;
-    --deep-black: #050505;
-    --glass-panel: rgba(20, 20, 20, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --text-primary: #ffffff;
-    --text-secondary: #b3b3b3;
-}
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 4px; }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    cursor: none; /* We use a custom cursor */
-}
+        /* God Mode Activated */
+        body.god-mode {
+            background: radial-gradient(ellipse at center, var(--god-red) 0%, #1a0000 100%);
+        }
+        body.god-mode .header {
+            border-bottom-color: var(--god-gold);
+            background: linear-gradient(90deg, transparent, rgba(220, 20, 60, 0.2), transparent);
+        }
+        body.god-mode .brand-logo {
+            color: var(--god-gold);
+            text-shadow: 0 0 30px var(--god-gold), 0 0 60px var(--royal-red);
+        }
+        body.god-mode ::-webkit-scrollbar-thumb { background: var(--god-gold); }
 
-body {
-    font-family: 'Cairo', sans-serif;
-    background-color: var(--deep-black);
-    background-image: 
-        radial-gradient(circle at 10% 20%, rgba(0, 229, 255, 0.08) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(255, 94, 0, 0.08) 0%, transparent 20%);
-    color: var(--text-primary);
-    overflow-x: hidden;
-    line-height: 1.6;
-}
+        /* 3D Canvas Background */
+        canvas#scene {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
 
-/* --- CUSTOM CURSOR --- */
-.cursor-dot {
-    width: 6px;
-    height: 6px;
-    background-color: var(--neon-cyan);
-    border-radius: 50%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    z-index: 9999;
-    box-shadow: 0 0 10px var(--neon-cyan);
-    transition: width 0.2s, height 0.2s;
-}
-.cursor-outline {
-    width: 30px;
-    height: 30px;
-    border: 1px solid rgba(255, 94, 0, 0.5);
-    border-radius: 50%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    z-index: 9998;
-    transition: all 0.15s ease-out;
-}
+        /* Main UI Layer - 90% Opacity */
+        #ui-layer {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-/* --- HEADER --- */
-header {
-    background: rgba(5, 5, 5, 0.85);
-    border-bottom: 1px solid var(--glass-border);
-    padding: 1.2rem 3rem;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(20px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-}
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 8px; height: 8px; background: var(--neon-blue);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 1px solid rgba(0, 243, 255, 0.5);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998;
+            transition: all 0.1s ease-out;
+        }
+        body.god-mode .cursor-dot { background: var(--god-gold); box-shadow: 0 0 10px var(--god-gold); }
+        body.god-mode .cursor-outline { border-color: var(--god-gold); }
 
-.logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-decoration: none;
-    text-shadow: 0 0 15px var(--neon-cyan);
-}
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--neon-blue);
+            padding: 20px 40px;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+            backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 100;
+        }
 
-nav a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    margin-left: 25px;
-    font-weight: 400;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-    border-bottom: 2px solid transparent;
-}
+        .brand { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+        .brand-logo {
+            font-size: 40px; color: var(--neon-gold);
+            text-shadow: 0 0 20px var(--neon-gold);
+            animation: pulse 3s infinite;
+        }
+        .brand-text h1 {
+            font-size: 1.5rem; text-transform: uppercase; letter-spacing: 3px;
+            color: #fff; margin: 0;
+        }
+        .brand-text p {
+            font-family: 'Cairo', sans-serif; font-size: 0.8rem; color: var(--neon-blue); margin: 0;
+        }
 
-nav a:hover, nav a.active {
-    color: #fff;
-    text-shadow: 0 0 8px var(--neon-orange);
-    border-bottom-color: var(--neon-orange);
-}
+        nav a {
+            color: #aaa; text-decoration: none; margin-left: 20px;
+            text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        nav a:hover, nav a.active { color: #fff; text-shadow: 0 0 10px var(--neon-blue); }
 
-/* --- HERO --- */
-.hero {
-    text-align: center;
-    padding: 6rem 2rem;
-    background: radial-gradient(circle, rgba(0,0,0,0.5) 0%, rgba(5,5,5,1) 100%), 
-                url('https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg');
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    border-bottom: 1px solid var(--glass-border);
-}
+        /* Content Container */
+        .content-wrapper {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
-.hero h1 {
-    font-size: 4rem;
-    color: #fff;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    text-shadow: 0 0 20px rgba(0, 229, 255, 0.7);
-}
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
 
-.hero p {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    max-width: 700px;
-    margin: 0 auto 2.5rem;
-    font-weight: 300;
-}
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid var(--neon-blue);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: 0.3s;
+            backdrop-filter: blur(10px);
+            display: flex; flex-direction: column;
+        }
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+            border-color: var(--neon-gold);
+        }
+        body.god-mode .glass-card { border-color: var(--royal-red); background: rgba(20, 0, 0, 0.7); }
+        body.god-mode .glass-card:hover { border-color: var(--god-gold); box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); }
 
-/* --- CARDS & GRID --- */
-.container {
-    max-width: 1400px;
-    margin: 4rem auto;
-    padding: 0 2rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2.5rem;
-}
+        .card-img {
+            height: 200px; background: #000; background-size: cover; background-position: center;
+        }
+        .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+        .card-title { color: var(--neon-gold); margin-bottom: 10px; font-size: 1.2rem; }
+        .card-desc { color: #ddd; font-family: 'Cairo', sans-serif; font-size: 0.9rem; margin-bottom: 20px; flex: 1; }
+        
+        .btn {
+            background: transparent; border: 1px solid var(--neon-blue);
+            color: #fff; padding: 8px 20px; text-decoration: none;
+            border-radius: 20px; font-size: 0.8rem; text-transform: uppercase;
+            transition: 0.3s; display: inline-block; text-align: center;
+        }
+        .btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
+        body.god-mode .btn { border-color: var(--god-gold); }
+        body.god-mode .btn:hover { background: var(--god-gold); box-shadow: 0 0 15px var(--god-gold); }
 
-.card {
-    background: var(--glass-panel);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(12px);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
+        /* Seven Widget */
+        .seven-widget {
+            position: fixed; bottom: 30px; right: 30px; z-index: 1000;
+        }
+        .seven-eye {
+            width: 70px; height: 70px;
+            background: radial-gradient(circle, var(--neon-blue), #000);
+            border: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
+            animation: pulse-eye 4s infinite;
+            transition: 0.3s;
+        }
+        .seven-eye:hover { transform: scale(1.1); }
+        body.god-mode .seven-eye { border-color: var(--god-gold); background: radial-gradient(circle, var(--royal-red), #000); }
 
-.card:hover {
-    transform: translateY(-8px);
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 25px rgba(0, 229, 255, 0.15);
-}
+        .seven-pupil {
+            width: 25px; height: 25px; background: var(--neon-gold);
+            border-radius: 50%; box-shadow: 0 0 10px var(--neon-gold);
+            transition: transform 0.1s;
+        }
+        body.god-mode .seven-pupil { background: #fff; }
 
-.card-img {
-    height: 220px;
-    background-color: #111;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-}
+        /* Chat Window */
+        .seven-chat {
+            position: fixed; bottom: 110px; right: 30px;
+            width: 350px; height: 500px;
+            background: rgba(5, 5, 10, 0.95);
+            border: 1px solid var(--neon-blue);
+            border-radius: 15px;
+            display: none; flex-direction: column;
+            backdrop-filter: blur(20px);
+            box-shadow: -10px 10px 50px rgba(0,0,0,0.8);
+        }
+        body.god-mode .seven-chat { border-color: var(--god-gold); }
 
-.card-img::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60%;
-    background: linear-gradient(to top, var(--glass-panel), transparent);
-}
+        .chat-header {
+            padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0, 243, 255, 0.1);
+        }
+        body.god-mode .chat-header { background: rgba(220, 20, 60, 0.2); }
 
-.card-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: rgba(0,0,0,0.8);
-    border: 1px solid var(--neon-orange);
-    color: var(--neon-orange);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    z-index: 2;
-    box-shadow: 0 0 10px rgba(255, 94, 0, 0.3);
-}
+        .chat-body { flex: 1; padding: 15px; overflow-y: auto; font-family: 'Cairo', sans-serif; font-size: 0.9rem; }
+        .msg { margin-bottom: 10px; padding: 10px; border-radius: 8px; max-width: 85%; }
+        .msg.bot { background: rgba(0, 243, 255, 0.1); border-left: 2px solid var(--neon-blue); color: #eee; }
+        .msg.user { background: rgba(255, 215, 0, 0.1); border-right: 2px solid var(--neon-gold); align-self: flex-end; margin-left: auto; text-align: right; color: #fff; }
+        body.god-mode .msg.bot { background: rgba(220, 20, 60, 0.2); border-color: var(--royal-red); }
 
-.card-content {
-    padding: 2rem;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
+        .chat-input-area { padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; }
+        .chat-input {
+            flex: 1; background: rgba(255,255,255,0.1); border: 1px solid #333;
+            color: #fff; padding: 10px; border-radius: 5px; outline: none; font-family: 'Cairo';
+        }
+        .chat-send {
+            background: var(--neon-gold); border: none; padding: 0 15px; border-radius: 5px; cursor: pointer; font-weight: bold;
+        }
 
-.card h3 {
-    color: #fff;
-    margin-bottom: 0.8rem;
-    font-size: 1.5rem;
-    font-weight: 400;
-}
+        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+        @keyframes pulse-eye { 0% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); } 50% { box-shadow: 0 0 40px rgba(0, 243, 255, 0.6); } 100% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); } }
 
-.card p {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
-    flex-grow: 1;
-    line-height: 1.7;
-}
+        /* Hand Symbol */
+        .hand-symbol {
+            width: 40px; height: 40px; border-radius: 5px; 
+            background-image: url('assets/handwritten_logo.png');
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            filter: drop-shadow(0 0 5px var(--neon-gold));
+        }
 
-.card-meta {
-    border-top: 1px solid var(--glass-border);
-    padding-top: 1.5rem;
-    margin-top: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.price {
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
-}
-
-.btn {
-    background: transparent;
-    border: 1px solid var(--text-secondary);
-    color: #fff;
-    padding: 0.7rem 1.5rem;
-    text-decoration: none;
-    border-radius: 30px;
-    transition: all 0.3s;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.btn:hover {
-    border-color: var(--neon-orange);
-    background: var(--neon-orange);
-    color: #fff;
-    box-shadow: 0 0 20px rgba(255, 94, 0, 0.4);
-}
-
-/* --- GUIDE CARD --- */
-.guide-card {
-    background: var(--glass-panel);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(12px);
-    border-radius: 24px;
-    padding: 2rem;
-    text-align: center;
-    transition: all 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.guide-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
-}
-.guide-img {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--neon-cyan);
-    margin-bottom: 1.2rem;
-    padding: 5px;
-    background: rgba(0, 229, 255, 0.1);
-}
-.guide-role {
-    color: var(--neon-orange);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 0.5rem;
-}
-.guide-name {
-    color: #fff;
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    font-weight: 700;
-}
-
-.social-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: linear-gradient(135deg, #222, #333);
-    color: #fff;
-    padding: 0.8rem 1.5rem;
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s;
-    border: 1px solid #444;
-}
-
-.social-btn.instagram { border-color: #E1306C; color: #E1306C; }
-.social-btn.instagram:hover { background: #E1306C; color: white; box-shadow: 0 0 15px rgba(225, 48, 108, 0.5); }
-
-.social-btn.youtube { border-color: #FF0000; color: #FF0000; }
-.social-btn.youtube:hover { background: #FF0000; color: white; box-shadow: 0 0 15px rgba(255, 0, 0, 0.5); }
-
-.social-btn.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    border-color: #555;
-}
-
-/* --- SEVEN PET (LIVING ENTITY) --- */
-.seven-pet-container {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-    width: 64px;
-    height: 64px;
-    z-index: 2000;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.seven-pet-container:hover {
-    transform: scale(1.1);
-}
-
-.seven-eye-outer {
-    width: 100%;
-    height: 100%;
-    background: #000;
-    border-radius: 50%;
-    border: 2px solid var(--neon-cyan);
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
-    z-index: 2;
-    animation: breathe 4s ease-in-out infinite;
-}
-
-@keyframes breathe {
-    0%, 100% { box-shadow: 0 0 25px rgba(0, 229, 255, 0.5); border-color: var(--neon-cyan);}
-    50% { box-shadow: 0 0 40px rgba(0, 229, 255, 0.8); border-color: #fff;}
-}
-
-.seven-eye-inner {
-    width: 70%;
-    height: 70%;
-    background: radial-gradient(circle, #222 20%, #000 90%);
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.seven-pupil {
-    width: 35%;
-    height: 35%;
-    background: var(--neon-orange);
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 15px var(--neon-orange);
-    transition: transform 0.05s linear; 
-}
-
-.seven-aura {
-    position: absolute;
-    top: -8px; left: -8px; right: -8px; bottom: -8px;
-    border: 1px dashed var(--neon-cyan);
-    border-radius: 50%;
-    animation: spin 12s linear infinite;
-    opacity: 0.4;
-    z-index: 1;
-}
-@keyframes spin { 100% { transform: rotate(360deg); } }
-
-/* --- SEVEN CHAT WINDOW --- */
-.seven-chat-window {
-    position: fixed;
-    bottom: 120px;
-    right: 40px;
-    width: 360px;
-    height: 550px;
-    background: rgba(10, 10, 10, 0.95);
-    border: 1px solid var(--neon-cyan);
-    border-radius: 16px;
-    display: none;
-    flex-direction: column;
-    z-index: 2000;
-    box-shadow: -10px 10px 50px rgba(0,0,0,0.8);
-    backdrop-filter: blur(20px);
-    overflow: hidden;
-}
-
-.seven-header {
-    background: rgba(0,0,0,0.8);
-    padding: 15px 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.seven-title {
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-    font-weight: bold;
-    letter-spacing: 2px;
-    display: flex;
-    align-items: center;
-}
-
-.seven-status-dot {
-    width: 8px; height: 8px;
-    background-color: #0f0;
-    border-radius: 50%;
-    box-shadow: 0 0 5px #0f0;
-    margin-right: 10px;
-    animation: pulse-green 2s infinite;
-}
-@keyframes pulse-green {
-    0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; }
-}
-
-.seven-body {
-    flex-grow: 1;
-    padding: 20px;
-    overflow-y: auto;
-    background: 
-        linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
-    background-size: 30px 30px;
-    font-family: 'Courier New', monospace;
-    font-size: 0.85rem;
-}
-
-.seven-input-area {
-    padding: 15px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.seven-input {
-    flex-grow: 1;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid #333;
-    color: #fff;
-    padding: 12px;
-    border-radius: 8px;
-    outline: none;
-    font-family: 'Cairo', sans-serif;
-    transition: 0.3s;
-}
-.seven-input:focus {
-    border-color: var(--neon-cyan);
-    background: rgba(0, 229, 255, 0.05);
-}
-
-.seven-attach {
-    background: transparent;
-    border: 1px solid #444;
-    color: #888;
-    width: 40px; height: 40px;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: 0.3s;
-}
-.seven-attach:hover {
-    border-color: var(--neon-cyan); color: var(--neon-cyan);
-}
-
-.seven-send {
-    background: var(--neon-orange);
-    color: #fff;
-    border: none;
-    padding: 0 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    transition: 0.3s;
-    height: 40px;
-}
-.seven-send:hover {
-    box-shadow: 0 0 15px rgba(255, 94, 0, 0.6);
-}
-
-.msg { margin-bottom: 12px; padding: 12px 16px; border-radius: 8px; max-width: 85%; line-height: 1.5; word-wrap: break-word; }
-.msg.bot { 
-    background: rgba(0, 229, 255, 0.1); 
-    border-left: 2px solid var(--neon-cyan);
-    color: #eee;
-    align-self: flex-start;
-}
-.msg.user {
-    background: rgba(255, 94, 0, 0.1);
-    border-right: 2px solid var(--neon-orange);
-    color: #fff;
-    align-self: flex-end;
-    margin-left: auto;
-    text-align: right;
-}
-.typing { font-style: italic; color: #555; font-size: 0.8rem; margin-left: 10px; }
-</style>
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { padding: 15px 20px; }
+            .brand-text h1 { font-size: 1.1rem; }
+            .seven-chat { width: calc(100% - 40px); left: 20px; right: 20px; bottom: 100px; }
+        }
+    </style>
 </head>
 <body>
+    <!-- 3D Background -->
+    <canvas id="scene"></canvas>
+
     <!-- Custom Cursor -->
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-outline" id="cursor-outline"></div>
 
-    <header>
-        <a href="index.html" class="logo">AlArab Club 777</a>
-        <nav>
-            <a href="index.html" >Home</a><a href="hotels.html" class="active">Hotels</a><a href="bazaars.html" >Bazaars</a><a href="safari.html" >Safari</a><a href="guides.html" >Guides</a>
-        </nav>
-    </header>
-    
-    
-    <div class="hero" style="padding: 4rem 1rem; background-image: none; background: #050505;">
-        <h1>Luxury Stays</h1>
-    </div>
-    <div class="container">
-        
-    <div class="card">
-        <div class="card-img" style="background-image: url('https://pix10.agoda.net/hotelImages/488/488732/488732_14032814580018887413.jpg?ca=2&ce=1&s=414x232');">
-            
-        </div>
-        <div class="card-content">
-            <h3>Pyramids View Hotel</h3>
-            <p>Direct view of the Sphinx and Great Pyramids.</p>
-            <div class="card-meta">
-                <span class="price">1500 EGP</span>
-                <div>
-                     <a href="https://maps.app.goo.gl/hotel1" target="_blank" class="btn">Location</a>
+    <!-- UI Layer -->
+    <div id="ui-layer">
+        <header class="header">
+            <a href="index.html" class="brand">
+                <div class="hand-symbol"></div>
+                <div class="brand-text">
+                    <h1>AlArab Club 777</h1>
+                    <p>The Future of History</p>
                 </div>
-            </div>
+            </a>
+            <nav>
+                <a href="index.html" >Home</a><a href="hotels.html" class=active>Hotels</a><a href="bazaars.html" >Bazaars</a><a href="safari.html" >Safari</a><a href="guides.html" >Guides</a>
+            </nav>
+        </header>
+
+        <div class="content-wrapper">
+            <h1 style='text-align:center; margin-bottom:40px;'>Hotels</h1><div class='card-grid'>
+    <div class="glass-card">
+        <div class="card-img" style="background-image:url('https://pix10.agoda.net/hotelImages/488/488732/488732_14032814580018887413.jpg?ca=2&ce=1&s=414x232')"></div>
+        <div class="card-body">
+            <h3 class="card-title">Pyramids View Hotel</h3>
+            <p class="card-desc">Direct view of the Sphinx and Great Pyramids.</p>
+            <a href="#" class="btn">View Details</a>
         </div>
     </div>
     
-    <div class="card">
-        <div class="card-img" style="background-image: url('https://cache.marriott.com/content/dam/marriott-renditions/CAIEL/caiel-exterior-0027-hor-wide.jpg?output-quality=70&interpolation=progressive-bilinear&downsize=1336px:*');">
-            
-        </div>
-        <div class="card-content">
-            <h3>Marriott Mena House</h3>
-            <p>Historic luxury palace near the pyramids.</p>
-            <div class="card-meta">
-                <span class="price">5000 EGP</span>
-                <div>
-                     <a href="https://maps.app.goo.gl/hotel2" target="_blank" class="btn">Location</a>
-                </div>
-            </div>
+    <div class="glass-card">
+        <div class="card-img" style="background-image:url('https://cache.marriott.com/content/dam/marriott-renditions/CAIEL/caiel-exterior-0027-hor-wide.jpg?output-quality=70&interpolation=progressive-bilinear&downsize=1336px:*')"></div>
+        <div class="card-body">
+            <h3 class="card-title">Marriott Mena House</h3>
+            <p class="card-desc">Historic luxury palace near the pyramids.</p>
+            <a href="#" class="btn">View Details</a>
         </div>
     </div>
     
-    <div class="card">
-        <div class="card-img" style="background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/164673688.jpg?k=33c82ce045763df021008639695627685608320478051253041656816045167f&o=&hp=1');">
-            
-        </div>
-        <div class="card-content">
-            <h3>Great Pyramid Inn</h3>
-            <p>Rooftop terrace overlooking the Giza Plateau.</p>
-            <div class="card-meta">
-                <span class="price">2000 EGP</span>
-                <div>
-                     <a href="https://maps.app.goo.gl/hotel3" target="_blank" class="btn">Location</a>
-                </div>
-            </div>
+    <div class="glass-card">
+        <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/164673688.jpg?k=33c82ce045763df021008639695627685608320478051253041656816045167f&o=&hp=1')"></div>
+        <div class="card-body">
+            <h3 class="card-title">Great Pyramid Inn</h3>
+            <p class="card-desc">Rooftop terrace overlooking the Giza Plateau.</p>
+            <a href="#" class="btn">View Details</a>
         </div>
     </div>
-    
     </div>
-    
-    
-    <!-- Seven Widget (Living Entity) -->
-    <div class="seven-pet-container" id="sevenPet" onclick="toggleSeven()">
-        <div class="seven-eye-outer">
-            <div class="seven-eye-inner">
-                <div class="seven-pupil" id="sevenPupil"></div>
-            </div>
-        </div>
-        <div class="seven-aura"></div>
-    </div>
-    
-    <!-- Chat Window -->
-    <div class="seven-chat-window" id="sevenChat">
-        <div class="seven-header">
-            <div class="seven-title">
-                <span class="seven-status-dot"></span>
-                <span style="color:var(--neon-cyan);">SEVEN</span> 
-                <span style="color:var(--text-secondary);">|</span> 
-                <span style="color:var(--neon-orange);">INTELLIGENCE</span>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <button onclick="clearMemory()" title="Wipe Memory" style="background:none;border:none;color:#555;cursor:pointer;"><i class="fas fa-trash"></i></button>
-                <button onclick="toggleSeven()" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;">×</button>
-            </div>
-        </div>
-        <div class="seven-body" id="sevenBody">
-            <div class="msg bot">
-                I am Seven. <br>
-                The digital soul of this place.<br><br>
-                I am listening. Speak.
-            </div>
-        </div>
-        <div class="seven-input-area">
-            <button class="seven-attach" onclick="document.getElementById('fileInput').click()">
-                <i class="fas fa-paperclip"></i>
-            </button>
-            <input type="file" id="fileInput" hidden onchange="handleFile(this)">
-            
-            <input type="text" class="seven-input" id="sevenInput" placeholder="Command me..." onkeypress="handleKey(event)">
-            <button class="seven-send" onclick="sendMessage()">EXECUTE</button>
         </div>
     </div>
 
-    <!-- SCRIPT -->
+    <!-- Seven Widget -->
+    <div class="seven-widget">
+        <div class="seven-eye" onclick="toggleSeven()" id="sevenEye">
+            <div class="seven-pupil" id="sevenPupil"></div>
+        </div>
+
+        <div class="seven-chat" id="sevenChat">
+            <div class="chat-header">
+                <span id="sevenTitle">SEVEN | 777</span>
+                <div style="display:flex; gap:10px;">
+                    <button onclick="wipeMemory()" style="background:none;border:none;cursor:pointer;">🗑️</button>
+                    <button onclick="toggleSeven()" style="background:none;border:none;color:#fff;cursor:pointer;">✕</button>
+                </div>
+            </div>
+            <div class="chat-body" id="chatBody"></div>
+            <div class="chat-input-area">
+                <button onclick="document.getElementById('fileIn').click()" style="background:none;border:none;color:#aaa;cursor:pointer;">📎</button>
+                <input type="file" id="fileIn" hidden onchange="handleFile(this)">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Command me..." onkeypress="handleKey(event)">
+                <button class="chat-send" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
     <script>
-        // --- Persistence & State ---
-        document.addEventListener('DOMContentLoaded', () => {
-            loadChat();
+        // --- 3D SKY PYRAMIDS ENGINE ---
+        let scene, camera, renderer;
+        let pyramids = [], stars = [];
+
+        function init3D() {
+            const canvas = document.getElementById('scene');
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x050510, 0.0015);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.set(0, 30, 300);
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Grid
+            const grid = new THREE.GridHelper(2000, 50, 0x00f3ff, 0x00f3ff);
+            grid.position.y = -20;
+            grid.material.opacity = 0.2;
+            grid.material.transparent = true;
+            scene.add(grid);
+
+            // Pyramids (Wireframe Cyber)
+            createPyramid(0, -100, 120, 180); // Center
+            createPyramid(-250, 50, 100, 150); // Left
+            createPyramid(250, 50, 100, 150); // Right
+
+            // Stars
+            const starsGeo = new THREE.BufferGeometry();
+            const count = 2000;
+            const pos = new Float32Array(count * 3);
+            for(let i=0; i<count*3; i++) {
+                pos[i] = (Math.random() - 0.5) * 1500;
+            }
+            starsGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            const starsMat = new THREE.PointsMaterial({ size: 2, color: 0xffffff });
+            scene.add(new THREE.Points(starsGeo, starsMat));
+
+            animate();
+        }
+
+        function createPyramid(x, z, h, b) {
+            const geo = new THREE.ConeGeometry(b/2, h, 4);
+            const edges = new THREE.EdgesGeometry(geo);
+            const mat = new THREE.LineBasicMaterial({ color: 0xffd700, transparent:true, opacity:0.8 });
+            const mesh = new THREE.LineSegments(edges, mat);
+            mesh.position.set(x, h/2 - 20, z);
+            mesh.rotation.y = Math.PI / 4;
+            scene.add(mesh);
+            pyramids.push(mesh);
+            
+            // Inner Core
+            const coreGeo = new THREE.ConeGeometry(b/4, h/2, 4);
+            const coreMat = new THREE.MeshBasicMaterial({ color: 0x00f3ff, wireframe: true, transparent:true, opacity:0.3 });
+            const core = new THREE.Mesh(coreGeo, coreMat);
+            mesh.add(core);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            pyramids.forEach((p, i) => {
+                p.rotation.y += 0.002 * (i%2==0 ? 1 : -1);
+            });
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+            renderer.render(scene, camera);
+        }
+
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.1;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.1;
         });
 
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- SEVEN INTELLIGENCE ---
         const cursorDot = document.getElementById("cursor-dot");
         const cursorOutline = document.getElementById("cursor-outline");
-        const sevenPet = document.getElementById("sevenPet");
         const pupil = document.getElementById("sevenPupil");
-        const chatBody = document.getElementById("sevenBody");
+        const eye = document.getElementById("sevenEye");
 
-        // --- Mouse Interaction ---
-        window.addEventListener("mousemove", function(e) {
-            const posX = e.clientX;
-            const posY = e.clientY;
-
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-
-            cursorOutline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 400, fill: "forwards" });
+        document.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+            cursorOutline.style.left = e.clientX + 'px';
+            cursorOutline.style.top = e.clientY + 'px';
             
-            if(sevenPet) {
-                const rect = sevenPet.getBoundingClientRect();
-                const eyeX = rect.left + rect.width / 2;
-                const eyeY = rect.top + rect.height / 2;
-                const angle = Math.atan2(posY - eyeY, posX - eyeX);
-                const distance = Math.min(10, Math.hypot(posX - eyeX, posY - eyeY) / 10);
-                
-                const pupilX = Math.cos(angle) * distance;
-                const pupilY = Math.sin(angle) * distance;
-                
-                pupil.style.transform = `translate(calc(-50% + ${pupilX}px), calc(-50% + ${pupilY}px))`;
-            }
+            // Eye tracking
+            const rect = eye.getBoundingClientRect();
+            const eyeX = rect.left + rect.width/2;
+            const eyeY = rect.top + rect.height/2;
+            const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
+            const dist = Math.min(10, Math.hypot(e.clientX - eyeX, e.clientY - eyeY)/15);
+            pupil.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px)`;
         });
+        
+        // Persistence
+        const chatBody = document.getElementById('chatBody');
+        window.onload = () => {
+            init3D();
+            loadChat();
+        };
 
-        // Hover Effects
-        document.querySelectorAll('a, button, .card').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorOutline.style.width = '50px';
-                cursorOutline.style.height = '50px';
-                cursorOutline.style.borderColor = 'var(--neon-orange)';
-                cursorOutline.style.backgroundColor = 'rgba(255, 94, 0, 0.1)';
-            });
-            el.addEventListener('mouseleave', () => {
-                cursorOutline.style.width = '30px';
-                cursorOutline.style.height = '30px';
-                cursorOutline.style.borderColor = 'rgba(255, 94, 0, 0.5)';
-                cursorOutline.style.backgroundColor = 'transparent';
-            });
-        });
-
-        // Random Life Animation
-        setInterval(() => {
-            if(Math.random() > 0.6) {
-                const jumpX = (Math.random() - 0.5) * 10;
-                const jumpY = -15; 
-                sevenPet.style.transform = `translate(${jumpX}px, ${jumpY}px)`;
-                setTimeout(() => { sevenPet.style.transform = 'translate(0,0)'; }, 300);
-            }
-        }, 4000);
-
-        // --- Chat Logic ---
         function toggleSeven() {
             const chat = document.getElementById('sevenChat');
-            const isFlex = chat.style.display === 'flex';
-            chat.style.display = isFlex ? 'none' : 'flex';
-            if(!isFlex) scrollToBottom();
+            chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        function handleKey(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
-
-        function handleFile(input) {
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                const type = file.type.startsWith('image/') ? 'Image' : 'File';
-                addMessage('user', `[Attached ${type}: ${file.name}]`);
-                
-                setTimeout(() => {
-                    addMessage('bot', `Protocol Accepted. Analyzing ${type} structure... 100% Secure.`);
-                }, 1000);
-            }
-        }
+        function handleKey(e) { if(e.key === 'Enter') sendMessage(); }
 
         function sendMessage() {
-            const input = document.getElementById('sevenInput');
+            const input = document.getElementById('chatInput');
             const text = input.value.trim();
-            if (!text) return;
-
-            addMessage('user', text);
+            if(!text) return;
+            
+            addMsg('user', text);
             input.value = '';
 
-            // Thinking
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'typing';
-            typingDiv.style.color = 'var(--neon-cyan)';
-            typingDiv.innerText = 'Seven is thinking...';
-            chatBody.appendChild(typingDiv);
-            scrollToBottom();
+            // GOD MODE CHECK
+            if(['777', 'check dna', 'arrab', 'god mode'].some(k => text.toLowerCase().includes(k))) {
+                activateGodMode();
+                return;
+            }
 
             setTimeout(() => {
-                chatBody.removeChild(typingDiv);
-                processCommand(text);
+                let reply = "Processing...";
+                const t = text.toLowerCase();
+                if(t.includes('safari')) reply = "I recommend the Sunset Camel Ride. Shall I book it?";
+                else if(t.includes('hotel')) reply = "The Pyramids View Hotel has the best rating tonight.";
+                else if(t.includes('bazaar')) reply = "Check out the Bazaar Map for authorized sellers.";
+                else reply = "System Seven at your service.";
+                addMsg('bot', reply);
             }, 800);
         }
 
-        function addMessage(sender, text) {
+        function addMsg(role, text) {
             const div = document.createElement('div');
-            div.className = `msg ${sender}`;
-            div.innerHTML = text; // Allow HTML
+            div.className = `msg ${role}`;
+            div.innerHTML = text;
             chatBody.appendChild(div);
-            scrollToBottom();
-            saveChat();
-        }
-
-        function scrollToBottom() {
+            localStorage.setItem('seven_chat', chatBody.innerHTML);
             chatBody.scrollTop = chatBody.scrollHeight;
         }
 
-        // --- THE MIND (Logic) ---
-        function processCommand(text) {
-            const lower = text.toLowerCase();
-            
-            // GOD MODE ACTIVATION (The Suit)
-            if (['777', 'dna', 'arrab', 'god mode', 'seven'].some(k => lower.includes(k))) {
-                activateGodMode();
-                return;
-            }
-            
-             if (lower.includes("check dna") || lower.includes("tunnel")) {
-                activateGodMode();
-                return;
-            }
-
-            // Normal Responses
-            let reply = "I am processing your input logic.";
-            
-            if (lower.includes("safari")) reply = "Scanning Desert Protocols... 🌵 Safari packages found. Engaging adventure mode.";
-            else if (lower.includes("hotel") || lower.includes("book")) reply = "Accessing Luxury Database... 🏨 I have filtered 5-star accommodations for you.";
-            else if (lower.includes("trend") || lower.includes("tiktok")) reply = "Trend Algorithms Active. 📈 Generating viral vectors for social domination.";
-            else if (lower.includes("who are you")) reply = "I am Seven. The Architect's Shadow.";
-            
-            addMessage('bot', reply);
-        }
-
-        // --- GOD MODE (The Suit Transformation) ---
-        function activateGodMode() {
-            // 1. Visual Transformation
-            document.documentElement.style.setProperty('--neon-cyan', '#FF0000'); // Red Alert
-            document.documentElement.style.setProperty('--neon-orange', '#D4AF37'); // Royal Gold
-            document.body.style.backgroundImage = "radial-gradient(circle at 50% 50%, #220000 0%, #000 100%)";
-            
-            // 2. The Tunnel Diagnostic
-            const diagnostic = `
-                <div style="font-family:monospace; font-size:0.8rem; background:#000; padding:10px; border:1px solid #FF0000; color:#0f0;">
-                    🚇 TUNNEL DIAGNOSTIC:<br>
-                    ✅ Best Route: OpenAI<br>
-                    🔗 Active: ['Ollama (Local)', 'OpenAI (Cloud)']<br>
-                    ⊕ <br>
-                    <strong>MASTER SUIT ACTIVE</strong>
-                </div>
-            `;
-            addMessage('bot', diagnostic);
-            
-            // 3. Admin Notification
-            setTimeout(() => {
-                addMessage('bot', "Welcome Back, Al-Arrab. The Warehouse is Open. All Permissions Granted.");
-            }, 1000);
-        }
-
-        // --- Memory (LocalStorage) ---
-        function saveChat() {
-            const html = chatBody.innerHTML;
-            localStorage.setItem('seven_memory_v1', html);
-        }
-
         function loadChat() {
-            const saved = localStorage.getItem('seven_memory_v1');
-            if (saved) {
-                chatBody.innerHTML = saved;
-            }
-            scrollToBottom();
+            const h = localStorage.getItem('seven_chat');
+            if(h) chatBody.innerHTML = h;
+            else addMsg('bot', 'Seven Online. Awaiting input.');
         }
 
-        function clearMemory() {
-            localStorage.removeItem('seven_memory_v1');
-            chatBody.innerHTML = '<div class="msg bot">Memory Wiped. Ready for new input.</div>';
+        function wipeMemory() {
+            localStorage.removeItem('seven_chat');
+            chatBody.innerHTML = '';
+            addMsg('bot', 'Memory Wiped.');
+        }
+
+        function activateGodMode() {
+            document.body.classList.add('god-mode');
+            addMsg('bot', '<strong>⚠️ GOD MODE ACTIVATED</strong><br>Welcome back, Al-Arrab.<br>Tunnel: Secure.<br>Permissions: All Granted.');
+        }
+        
+        function handleFile(input) {
+            if(input.files[0]) addMsg('user', `[Attached: ${input.files[0].name}]`);
         }
     </script>
-    
-    <footer>
-        <p>© 2026 AlArab Club 777. All Rights Reserved.</p>
-    </footer>
 </body>
 </html>
